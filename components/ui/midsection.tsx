@@ -26,7 +26,7 @@ export default function Midsection() {
           </div>
 
           <div className="space-y-10">
-            <h2 className="font-source text-2xl font-bold text-center border-b-1 border-black pb-2 max-w-xs mx-auto">
+            <h2 className="font-source text-3xl font-bold text-center border-b-1 border-black pb-2 max-w-md mx-auto">
               Featured Engine Tools
             </h2>
        
