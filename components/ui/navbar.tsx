@@ -13,19 +13,19 @@ const Navbar = () => {
     const router = useRouter();
 
     useEffect(() => {
-     
+
         fetchUser();
     }, [fetchUser, logoutUser]);
 
-    const handlelogout = async ()=>{
+    const handlelogout = async () => {
         setIsDropdownOpen(false);
         await logoutUser();
         router.refresh();
     }
- 
-    const isUserLoggedIn = !!name || !!email; 
 
-    
+    const isUserLoggedIn = !!name || !!email;
+
+
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -42,19 +42,21 @@ const Navbar = () => {
         <nav className='w-screen h-17 border-b-1 font-source relative flex justify-between items-center px-7' ref={dropdownRef}>
             <div className='font-source text-2xl font-extrabold'>Covalent</div>
 
-            {/* Mobile Actions: Only shows Hamburger if Logged Out. Shows Profile Dropdown if Logged In */}
+
             <div className='flex items-center md:hidden'>
                 {isUserLoggedIn ? (
-                    /* Mobile Profile Dropdown (Same as Desktop Style) */
+
                     <div className="relative inline-block text-left">
                         <button
                             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                             className="flex items-center gap-3 px-3 py-1.5 cursor-pointer font-semibold text-black bg-white border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 ease-in-out hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px]"
                         >
-                            <img
+                            <Image
                                 src={avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=100&auto=format&fit=crop'}
                                 alt="profile"
                                 className="w-6 h-6 border border-black object-cover"
+                                width={6}
+                                height={6}
                             />
                             <span className="text-sm max-w-[80px] truncate">{name?.split(' ')[0] || 'Developer'}</span>
                             <svg
@@ -67,7 +69,7 @@ const Navbar = () => {
                             </svg>
                         </button>
 
-                        {/* Mobile Dropdown Menu Card */}
+
                         {isDropdownOpen && (
                             <div className="absolute right-0 mt-2 w-48 border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] z-50">
                                 <div className="py-1">
@@ -111,7 +113,7 @@ const Navbar = () => {
                 )}
             </div>
 
-            {/* Mobile Menu Links Drawer (Only for Unauthenticated Users) */}
+
             {ismenu && !isUserLoggedIn && (
                 <div className={`flex transition-all z-10 duration-500 flex-col w-full absolute px-5 bg-black text-white py-4 gap-6 md:hidden right-0 top-17 items-start`}>
                     <ul className='flex flex-col items-start justify-center gap-6'>
@@ -138,19 +140,21 @@ const Navbar = () => {
                 </ul>
             </div>
 
-            {/* Desktop Action Section */}
+
             <div className='flex items-center px-3 hidden md:flex'>
                 {isUserLoggedIn ? (
-                    /* Desktop Profile Box with Dropdown Menu */
+
                     <div className="relative inline-block text-left">
                         <button
                             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                             className="flex items-center gap-3 px-4 py-2 cursor-pointer font-semibold text-black bg-white border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 ease-in-out hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px]"
                         >
-                            <img
+                            <Image
                                 src={avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=100&auto=format&fit=crop'}
                                 alt="profile"
                                 className="w-6 h-6 border border-black object-cover"
+                                width={6}
+                                height={6}
                             />
                             <span className="text-sm">{name?.split(' ')[0] || 'Developer'}</span>
                             <svg
@@ -163,7 +167,7 @@ const Navbar = () => {
                             </svg>
                         </button>
 
-                        {/* Dropdown Menu */}
+
                         {isDropdownOpen && (
                             <div className="absolute right-0 mt-2 w-48 border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] z-50">
                                 <div className="py-1">
@@ -200,7 +204,7 @@ const Navbar = () => {
                         )}
                     </div>
                 ) : (
-                    /* Default Login Button */
+
                     <Link href={"/login"}>
                         <button className="px-4 py-2 cursor-pointer font-semibold text-black bg-white border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 ease-in-out hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px]">
                             Login/Register

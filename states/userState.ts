@@ -11,7 +11,7 @@ interface userState {
   avatar: string | null;
   id: string | null;
   fetchUser: () => Promise<void>;
-  logoutUser: () => Promise<void>; // Add a function to fetch user data
+  logoutUser: () => Promise<void>; 
 }
 
 export const useUserState = create<userState>((set) => ({
@@ -20,7 +20,6 @@ export const useUserState = create<userState>((set) => ({
   avatar: null,
   id: null,
 
-  // Function to fetch user data
   fetchUser: async () => {
     const res = await supabase.auth.getUser();
     const userMetadata = res.data.user?.user_metadata;
