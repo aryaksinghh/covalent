@@ -5,12 +5,22 @@ import { type Provider } from '@supabase/supabase-js';
 import { createClient } from '@/lib/supabase/client';
 const supabase = createClient();
 const provider = 'google' as Provider
+const provider2 = 'github' as Provider
 
 export default function Login() {
   
   const googleauth = async()=>{
     await supabase.auth.signInWithOAuth({
       provider,
+      options: {
+        redirectTo: `${process.env.NEXT_PUBLIC_HOST}/auth/callback`,
+      },
+    })
+  }
+
+  const githubauth = async()=>{
+    await supabase.auth.signInWithOAuth({
+      provider: provider2,
       options: {
         redirectTo: `${process.env.NEXT_PUBLIC_HOST}/auth/callback`,
       },
@@ -86,7 +96,7 @@ export default function Login() {
               </button>
 
           
-              <button className="w-full cursor-pointer font-source text-xs uppercase tracking-wider font-bold py-3 px-4 bg-white text-black border border-black rounded-none flex items-center justify-center gap-3 transition-all duration-150 hover:bg-black hover:text-white group">
+              <button onClick={githubauth} className="w-full cursor-pointer font-source text-xs uppercase tracking-wider font-bold py-3 px-4 bg-white text-black border border-black rounded-none flex items-center justify-center gap-3 transition-all duration-150 hover:bg-black hover:text-white group">
                
                 <svg
                   className="w-4 h-4 shrink-0 fill-current text-black group-hover:text-white transition-colors duration-150"
