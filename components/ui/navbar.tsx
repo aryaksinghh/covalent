@@ -106,7 +106,7 @@ const Navbar = () => {
                         )}
                     </div>
                 ) : (
-                    /* Hamburger icon ONLY when logged out */
+                    
                     <button onClick={() => setismenu(!ismenu)} className='cursor-pointer hover:border border-black transition-all p-1'>
                         <Image src="/menu_burger.png" width={27} height={27} alt='hamburger_menu' />
                     </button>
@@ -205,7 +205,7 @@ const Navbar = () => {
                     </div>
                 ) : (
 
-                    <Link href={"/login"}>
+                    <Link href={'/login'}>
                         <button className="px-4 py-2 cursor-pointer font-semibold text-black bg-white border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 ease-in-out hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px]">
                             Login/Register
                         </button>

@@ -36,5 +36,6 @@ export const useUserState = create<userState>((set) => ({
   logoutUser: async()=>{
     await supabase.auth.signOut();
     set({ name: null, email: null, avatar: null, id: null });
+    window.location.href = `${process.env.NEXT_PUBLIC_HOST}`
   }
 }));

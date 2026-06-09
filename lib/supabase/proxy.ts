@@ -41,7 +41,7 @@ export async function updateSession(request: NextRequest) {
   const { data } = await supabase.auth.getClaims()
 
   const user = data?.claims
-  const publicRoutes = ['/', '/about', '/contact']; // Add your public routes here
+  const publicRoutes = ['/', '/about', '/contact', '/terms&conditions', '/policy', '/vision', "/api/user_insert_db"]; // Add your public routes here
 
   if (
     !user &&

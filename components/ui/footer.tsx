@@ -25,9 +25,9 @@ export default function Footer() {
           <div className="md:col-span-3 space-y-3">
             <span className="font-source text-[11px] uppercase tracking-widest text-gray-400 block">Index</span>
             <div className="flex flex-col space-y-2 font-source text-xs">
-              <Link href="/docs" className="hover:text-gray-500 transition-colors">Privacy Policy</Link>
-              <Link href="/changelog" className="hover:text-gray-500 transition-colors">Terms & condition</Link>
-              <Link href="/privacy" className="hover:text-gray-500 transition-colors">About</Link>
+              <Link href="/policy" className="hover:text-gray-500 transition-colors">Privacy Policy</Link>
+              <Link href="/terms&conditions" className="hover:text-gray-500 transition-colors">Terms & condition</Link>
+              <Link href="/about" className="hover:text-gray-500 transition-colors">About</Link>
             </div>
           </div>
         </div>

@@ -1,11 +1,17 @@
-"use client"
-import React from 'react'
-import Login from '@/components/ui/login'
+import Login from "@/components/ui/login";
+import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
 
-const LoginPage = () => {
-  return (
-    <><Login/></>
-  )
+export default async function LoginPage() {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (user) {
+    redirect("/");
+  }
+
+  return <Login />;
 }
-
-export default LoginPage
