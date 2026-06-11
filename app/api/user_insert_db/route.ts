@@ -1,8 +1,14 @@
 import "dotenv/config"
 import { NextRequest, NextResponse } from "next/server";
 import {prisma} from "@/prisma_setup/main"
+import { createClient } from "@/lib/supabase/server";
  
 export async function POST(request: NextRequest) {
+  const supabase = await createClient();
+  const {data:{user}} = await supabase.auth.getUser();
+  if(!user){
+    return NextResponse.json({status:400, message:"User is not authorized"})
+  }
     try {
       const body = await request.json();
   
@@ -24,10 +30,10 @@ export async function POST(request: NextRequest) {
           id: body.id,
           name: body.name,
           email: body.email,
-          avatar: body.avatar_url,
-          role: body.role,
-          country: body.country,
-          experience: body.experience
+          avatar: body.avatar,
+          role: body.role || "none",
+          country: body.country  || "none",
+          experience: body.experience  || "none"
         },
       });
   

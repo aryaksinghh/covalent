@@ -18,4 +18,40 @@ model User {
   country String?
   experience String?
   avatar String?
+  ground grounds[]
+  notes notebook[]
+}
+
+model grounds {
+  id String @id
+  userid String 
+  user User @relation(fields: [userid], references: [id])
+  name String
+  tech String
+  experience String
+  grade Int @default(0)
+  createdAt DateTime
+  session sessions[]
+}
+
+model notebook {
+  id String @id
+  userid String
+  user User @relation(fields: [userid], references: [id])
+  title String?
+  description String?
+}
+
+model sessions{
+  id String @id
+  groundid String 
+  ground grounds @relation(fields:[groundid], references:[id])
+  name String
+  userid String
+  type String
+  score Int @default(0)
+  questions String[] @default([])
+  answers String[] @default([])
+  topics String[] @default([])
+  topic_level String[] @default([])
 }

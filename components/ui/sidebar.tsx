@@ -37,7 +37,7 @@ export default function Sidebar({ isOpen, onClose, Avatar, logout }: SidebarProp
         <nav className="p-4 space-y-4">
           {[
             { name: 'Dashboard', icon: <LayoutDashboard size={20} />, ref:'/dashboard' },
-            { name: 'Clusters', icon: <Box size={20} />, ref:'/clusters' },
+            { name: 'Grounds', icon: <Box size={20} />, ref:'/grounds' },
             { name: 'Blogs', icon: <Newspaper size={20} />, ref:'/blogs' },
             { name: 'Notebook', icon: <BookAIcon size={20} />, ref:'/notebook' },
             { name: 'Profile', icon: <User size={20} />, ref:'/profile' },

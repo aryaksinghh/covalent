@@ -1,31 +1,49 @@
 "use client"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import InfoBar from "@/components/ui/infobar";
 import Sidebar from "@/components/ui/sidebar";
 import { useUserState } from "@/states/userState";
 import Image from "next/image";
 
 interface ProfileDetails {
-    name: string;
-    email: string; // Added to state
-    role: string;
-    country: string;
-    experience: string;
+    name: string | undefined;
+    email: string | undefined;
+    role: string | undefined;
+    country: string | undefined;
+    experience: string | undefined;
 }
 
 export default function Profile() {
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    
+    const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
+    const [triggereffect, settriggereffect] = useState<boolean>(true);
+
     const { name, fetchUser, logoutUser, email, id, avatar } = useUserState();
 
+
     const [profileDetails, setProfileDetails] = useState<ProfileDetails>({
-        name: name || "Developer",
-        email: email || "developer@covalent.app",
-        role: "Full Stack Engineer",
-        country: "India",
-        experience: "2 Years",
+        name: name || undefined,
+        email: email || undefined,
+        role: "N/A",
+        country: "N/A",
+        experience: "N/A",
     });
+
+    useEffect(() => {
+        const dataFetching = async () => {
+            const userDatapg = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/user_fetch_db`, { method: "GET" });
+            const user = await userDatapg.json()
+            setProfileDetails({
+                name: user.userData.name || null,
+                email: user.userData.email || null,
+                role: user.userData.role || null,
+                country: user.userData.country || null,
+                experience: user.userData.experience || null,
+            })
+        }
+        dataFetching();
+    }, [triggereffect])
+
 
     const [formData, setFormData] = useState<ProfileDetails>({ ...profileDetails });
     const [isSaving, setIsSaving] = useState(false);
@@ -38,11 +56,25 @@ export default function Profile() {
     const handleFormSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSaving(true);
-        // Add your API call here: await axios.patch(`/api/user/${id}`, formData);
-        await new Promise((resolve) => setTimeout(resolve, 800));
-        setProfileDetails(formData);
-        setIsSaving(false);
-        setIsEditModalOpen(false);
+        try {
+            await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/user_update_db`,
+                {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        name: formData.name || profileDetails.name,
+                        role: formData.role || profileDetails.role,
+                        country: formData.country || profileDetails.country,
+                        experience: formData.experience || profileDetails.experience
+                    })
+                })
+            setIsSaving(false);
+            setIsEditModalOpen(false);
+            settriggereffect(!triggereffect);
+        } catch (error) {
+            console.error("error occured while updating data through api in profile form", error)
+        }
+
     };
 
     return (
@@ -53,12 +85,12 @@ export default function Profile() {
 
             <main className="max-w-4xl mx-auto px-6 py-12">
                 <div className="bg-white border-4 border-black p-8 md:p-12 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-                    
+
                     {/* Header: Avatar + Intro */}
                     <div className="flex flex-col md:flex-row items-center gap-8 border-b-4 border-dashed border-black pb-8 mb-8">
                         <Image
-                            src={avatar || "https://api.dicebear.com/7.x/bottts/svg?seed=covalent"} 
-                            alt="Avatar" 
+                            src={avatar || "https://api.dicebear.com/7.x/bottts/svg?seed=covalent"}
+                            alt="Avatar"
                             className="w-32 h-32 bg-[#e0e0e0] border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] object-cover"
                             width={33} height={33}
                         />
@@ -84,7 +116,7 @@ export default function Profile() {
                         ))}
                     </div>
 
-                    <button 
+                    <button
                         onClick={handleOpenModal}
                         className="w-full bg-cyan-400 cursor-pointer hover:bg-cyan-300 border-4 border-black py-4 font-black text-xl uppercase shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
                     >
@@ -101,7 +133,7 @@ export default function Profile() {
                         <form onSubmit={handleFormSubmit} className="space-y-4">
                             <div>
                                 <label className="block text-xs font-bold mb-1">Name</label>
-                                <input className="w-full border-2 border-black p-3 font-bold" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} />
+                                <input className="w-full border-2 border-black p-3 font-bold" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
                             </div>
                             <div>
                                 <label className="block text-xs font-bold mb-1 text-gray-400">Email (Cannot be changed)</label>
@@ -110,16 +142,16 @@ export default function Profile() {
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
                                     <label className="block text-xs font-bold mb-1">Role</label>
-                                    <input className="w-full border-2 border-black p-3 font-bold" value={formData.role} onChange={(e) => setFormData({...formData, role: e.target.value})} />
+                                    <input className="w-full border-2 border-black p-3 font-bold" value={formData.role} onChange={(e) => setFormData({ ...formData, role: e.target.value })} />
                                 </div>
                                 <div>
                                     <label className="block text-xs font-bold mb-1">Country</label>
-                                    <input className="w-full border-2 border-black p-3 font-bold" value={formData.country} onChange={(e) => setFormData({...formData, country: e.target.value})} />
+                                    <input className="w-full border-2 border-black p-3 font-bold" value={formData.country} onChange={(e) => setFormData({ ...formData, country: e.target.value })} />
                                 </div>
                             </div>
                             <div>
                                 <label className="block text-xs font-bold mb-1">Experience</label>
-                                <input className="w-full border-2 border-black p-3 font-bold" value={formData.experience} onChange={(e) => setFormData({...formData, experience: e.target.value})} />
+                                <input className="w-full border-2 border-black p-3 font-bold" value={formData.experience} onChange={(e) => setFormData({ ...formData, experience: e.target.value })} />
                             </div>
                             <div className="flex gap-4 pt-4">
                                 <button type="button" onClick={() => setIsEditModalOpen(false)} className="flex-1 cursor-pointer border-2 border-black py-3 font-bold uppercase hover:bg-gray-100">Cancel</button>
