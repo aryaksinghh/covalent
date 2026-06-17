@@ -23,19 +23,20 @@ model User {
 }
 
 model grounds {
-  id String @id
+  id String @id @default(uuid())
   userid String 
   user User @relation(fields: [userid], references: [id])
   name String
-  tech String
+  category String
+  stack String
   experience String
   grade Int @default(0)
-  createdAt DateTime
+  createdAt DateTime  @default(now())
   session sessions[]
 }
 
 model notebook {
-  id String @id
+  id String @id @default(uuid())
   userid String
   user User @relation(fields: [userid], references: [id])
   title String?
@@ -43,7 +44,7 @@ model notebook {
 }
 
 model sessions{
-  id String @id
+  id String @id @default(uuid())
   groundid String 
   ground grounds @relation(fields:[groundid], references:[id])
   name String

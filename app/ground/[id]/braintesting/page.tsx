@@ -1,0 +1,134 @@
+import Braintestingui from "./braintestingui"
+import { prisma } from "@/prisma_setup/main"
+import { createClient } from "@/lib/supabase/server"
+import Alreadytested from "@/components/ui/alreadytested"
+import Groq from "groq-sdk";
+import { Redis } from '@upstash/redis'
+
+
+interface paramstype {
+    params: Promise<{ id: string }>
+}
+
+interface optionobj {
+    option: string,
+    text: string
+  }
+
+interface Question {
+    id: number;
+    questionText: string;
+    options: optionobj[];
+    answer: string
+  }
+
+export default async function Braintesting({ params }: paramstype) {
+    const { id } = await params;
+    const redis = Redis.fromEnv()
+    let qb:Question;
+   
+    const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+
+    const groundobj = await prisma.grounds.findUnique({
+        where: { id },
+    })
+    const stack = groundobj?.stack;
+    if ((groundobj?.grade || 0) > 0) {
+        return <Alreadytested />
+    }
+
+    const redisFetch:Question|null = await redis.get(`ques:${id}`);
+    if (!redisFetch){
+
+    const chatcomp = await groq.chat.completions.create({
+        messages : [
+            {
+              role: "system",
+              content: `
+          You are a senior ${stack} engineer, technical interviewer, and educator.
+          
+          Your task is to generate high-quality multiple-choice questions that accurately assess a developer's knowledge and practical skill level.
+          
+          Return ONLY valid JSON.
+          
+          Rules:
+          - Return a JSON array.
+          - Do not include markdown.
+          - Do not include explanations.
+          - Do not include notes.
+          - Do not include any text before or after the JSON.
+          - Generate exactly 5 questions.
+          - Difficulty must progressively increase from Question 1 to Question 5.
+          - Avoid duplicate concepts.
+          - Cover different areas of the technology whenever possible.
+          - Focus on real-world developer knowledge rather than trivia.
+          - Questions may test concepts, debugging, performance, architecture, best practices, APIs, or practical development scenarios.
+          
+          Required JSON Schema:
+          
+          [
+            {
+              "id": 1,
+              "questionText": "",
+              "options": [
+                {
+                  "option": "A",
+                  "text": ""
+                },
+                {
+                  "option": "B",
+                  "text": ""
+                },
+                {
+                  "option": "C",
+                  "text": ""
+                },
+                {
+                  "option": "D",
+                  "text": ""
+                }
+              ],
+              "answer": "A"
+            }
+          ]
+          
+          Validation Rules:
+          - id must be sequential starting from 1.
+          - Each question must have exactly 4 options.
+          - option values must be A, B, C, D.
+          - answer must contain only the correct option letter.
+          - Exactly one option must be correct.
+          `
+            },
+            {
+              role: "user",
+              content: `
+          Technology: ${stack}
+          Question Count: 5
+          Purpose: Skill Assessment
+          
+          Difficulty Progression:
+          1. Beginner
+          2. Beginner-Intermediate
+          3. Intermediate
+          4. Advanced
+          5. Expert
+          
+          Generate the questions now.
+          `
+            }
+          ],
+        model: "openai/gpt-oss-20b",
+    });
+    const res = chatcomp.choices[0]?.message?.content || "";
+    const quesobject = JSON.parse(res);
+    await redis.set(`ques:${id}`, quesobject)
+    qb = quesobject
+} else{
+    qb = redisFetch
+}
+
+    
+
+    return <Braintestingui groundid={id} ques={qb} />
+}

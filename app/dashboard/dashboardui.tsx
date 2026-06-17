@@ -3,12 +3,15 @@ import { useState } from "react";
 import InfoBar from "@/components/ui/infobar";
 import Sidebar from "@/components/ui/sidebar";
 import { useUserState } from "@/states/userState";
+import Link from "next/link";
+import { LinkIcon} from 'lucide-react';
+import CreateGroundModal from "@/components/ui/groundbuildmodal";
 
 interface Ground {
   id: string;
   userid: string;
   name: string;
-  tech: string;
+  stack: string;
   experience: string;
   grade: number;
   createdAt: Date;
@@ -44,6 +47,7 @@ interface Notebook {
 export default function Dashboardui({ session, notebooks }: DashboarduiProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { name, fetchUser, logoutUser, email, id, avatar } = useUserState();
+  const [isgroundopen, setisgroundopen] = useState<boolean>(false);
 
 
   // --- Sample States for Layout Demonstration ---
@@ -51,7 +55,8 @@ export default function Dashboardui({ session, notebooks }: DashboarduiProps) {
   // Sample Notebooks State (Clear array to test empty create state)
 
 
-  const [hasTakenRevision, setHasTakenRevision] = useState(false);
+  const [hasTakenRevision, setHasTakenRevision] = useState<boolean>(session.length>0? true : false);
+  
 
   // Expanded to 77 nodes (11 columns x 7 rows) to fill horizontal space perfectly
   const contributionGrid = Array.from({ length: 77 }, (_, i) => ({
@@ -78,7 +83,8 @@ export default function Dashboardui({ session, notebooks }: DashboarduiProps) {
 
   return (
     <>
-      {session ? (
+    {isgroundopen && <CreateGroundModal isOpen={isgroundopen} onClose={()=> setisgroundopen(false)} />}
+      {session.length>0 ? (
         <div className="bg-[#f0f0f0] w-full overflow-x-hidden min-h-screen text-black font-mono antialiased">
           {/* Navigation Layer */}
           <InfoBar onMenuClick={() => setIsSidebarOpen(true)} Name={name} FetchUser={fetchUser} />
@@ -124,9 +130,11 @@ export default function Dashboardui({ session, notebooks }: DashboarduiProps) {
                           <span className="font-bold text-sm truncate tracking-tight">
                             {notebook.title}
                           </span>
+                          <Link href={"/sample"}><LinkIcon size={20}/></Link> 
                         </div>
                       ))}
                     </div>
+                    // on link href have to add ntebook page note link dynamically
                   )}
                 </div>
 
@@ -215,7 +223,7 @@ export default function Dashboardui({ session, notebooks }: DashboarduiProps) {
                 </div>
 
                 {session.length > 0 && (
-                  <button className="px-6 py-3 text-xs cursor-pointer font-black uppercase tracking-wider text-white bg-black hover:bg-neutral-800 active:translate-x-[2px] active:translate-y-[2px] border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] transition-all rounded-none self-start sm:self-center">
+                  <button onClick={()=> setisgroundopen(true)} className="px-6 py-3 text-xs cursor-pointer font-black uppercase tracking-wider text-white bg-black hover:bg-neutral-800 active:translate-x-[2px] active:translate-y-[2px] border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] transition-all rounded-none self-start sm:self-center">
                     Create New Ground
                   </button>
                 )}
@@ -230,7 +238,7 @@ export default function Dashboardui({ session, notebooks }: DashboarduiProps) {
                       <p className="text-sm font-black uppercase">No active operations initialized.</p>
                       <p className="text-xs text-black/50 mt-1">System standby mode.</p>
                     </div>
-                    <button className="px-6 py-3 text-sm cursor-pointer font-black uppercase tracking-wider text-white bg-black hover:bg-neutral-800 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] mx-auto block">
+                    <button onClick={()=> setisgroundopen(true)} className="px-6 py-3 text-sm cursor-pointer font-black uppercase tracking-wider text-white bg-black hover:bg-neutral-800 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] mx-auto block">
                       Create New Ground
                     </button>
                   </div>
@@ -269,13 +277,14 @@ export default function Dashboardui({ session, notebooks }: DashboarduiProps) {
           <p className="text-sm font-bold uppercase tracking-tight text-gray-600 mb-10 text-center">
             Initialize your first workspace to begin.
           </p>
-        
           <button 
-            className="bg-black text-white text-lg font-black uppercase tracking-[0.2em] px-10 py-5 border-4 border-black hover:bg-white hover:text-black transition-all duration-100 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"
+           onClick={()=> setisgroundopen(true)}
+            className="bg-white text-black cursor-pointer text-lg font-black uppercase tracking-[0.2em] px-10 py-5 border-4 border-black hover:translate-x-[6px] hover:translate-y-[6px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]  hover:text-black transition-all duration-100 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] "
           >
             Create New
           </button>
         </div>
+        //for the upper buttton there will be either route or modal
       )}
     </>
   );
