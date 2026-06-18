@@ -51,6 +51,7 @@ model sessions{
   userid String
   type String
   score Int @default(0)
+  createdAt DateTime  @default(now())
   questions String[] @default([])
   answers String[] @default([])
   topics String[] @default([])

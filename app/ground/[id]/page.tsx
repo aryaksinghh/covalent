@@ -12,18 +12,24 @@ export default async function GroundPage({params}:paramstype){
     const supabase = await createClient();
     const {data:{user}} = await supabase.auth.getUser();
     const dbuser = await prisma.user.findUnique({
-        where:{id:user?.id},
-        include:{
-            ground: true
-        }
-    })
+        where: {
+          id: user?.id,
+        },
+        include: {
+          ground: {
+            include: {
+              session: true,
+            },
+          },
+        },
+      });
 
    const specificGround =  dbuser?.ground.find((s)=> s.id == dynamicParams.id)
    if (!specificGround){
     notFound();
    }
 
-    return <Groundpageui/>
+    return <Groundpageui ground={specificGround}/>
 
   
 }
