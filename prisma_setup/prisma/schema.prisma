@@ -18,6 +18,7 @@ model User {
   country String?
   experience String?
   avatar String?
+  xp Int @default(0)
   ground grounds[]
   notes notebook[]
 }
@@ -51,6 +52,7 @@ model sessions{
   userid String
   type String
   score Int @default(0)
+  xp Int @default(0)
   createdAt DateTime  @default(now())
   questions String[] @default([])
   answers String[] @default([])

@@ -7,29 +7,29 @@ export async function POST(request: NextRequest) {
   const supabase = await createClient();
   const {data:{user}} = await supabase.auth.getUser();
   if(!user){
-    return NextResponse.json({status:400, message:"User is not authorized"})
+    return NextResponse.json({message:"User is not authorized"}, {status:401})
   }
     try {
       const body = await request.json();
 
       interface dataobjtype {
-        name?: string,
-        grade?: number
+        score?: number,
+        xp?: number
       }
   
       const dataobj: dataobjtype = {}
-      if(body.name) dataobj.name = body.name;
-      if(body.grade) dataobj.grade = body.grade
+      if(body.score) dataobj.score = body.score;
+      if(body.grade) dataobj.xp = body.xp
 
-      const up = await prisma.grounds.update({
+      const up = await prisma.sessions.update({
         where: {
-            id: body.groundid
+            id: body.sessionid
         },
         data: dataobj,
       });
   
       return NextResponse.json(
-        { message: up, status:201 }
+        { message: up, }, {status:200}
       );
     } catch (error) {
       console.error(error);

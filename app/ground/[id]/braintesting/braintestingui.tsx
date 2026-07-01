@@ -14,125 +14,6 @@ interface Question {
   answer: string
 }
 
-// 5 MCQ Sample Questions matching your web development focus
-// const ques: Question[] = [
-//   {
-//     id: 1,
-//     questionText: "What is the primary function of the 'useEffect' hook in React?",
-//     options: [
-//       {
-//         option: "A",
-//         text: "To directly mutate the browser DOM elements synchronously."
-//       },
-//       {
-//         option: "B",
-//         text: "To handle side effects such as data fetching, subscriptions, or manual DOM updates."
-//       },
-//       {
-//         option: "C",
-//         text: "To force a component to re-render without changing states."
-//       },
-//       {
-//         option: "D",
-//         text: "To store local component values that don't trigger updates on rewrite."
-//       }
-//     ],
-//     answer: "B"
-//   },
-//   {
-//     id: 2,
-//     questionText: "Which of the following describes JavaScript's Event Loop mechanism?",
-//     options: [
-//       {
-//         option: "A",
-//         text: "It executes multi-threaded tasks concurrently across separate CPU threads."
-//       },
-//       {
-//         option: "B",
-//         text: "It monitors the Call Stack and the Callback Queue to manage asynchronous execution."
-//       },
-//       {
-//         option: "C",
-//         text: "It completely blocks user interactions until all network responses resolve."
-//       },
-//       {
-//         option: "D",
-//         text: "It caches DOM structures to speed up visual rendering processes."
-//       }
-//     ],
-//     answer: "B"
-//   },
-//   {
-//     id: 3,
-//     questionText: "In CSS layout systems, what does the 'flex-shrink' property control?",
-//     options: [
-//       {
-//         option: "A",
-//         text: "The initial main size of a flex item before space distribution happens."
-//       },
-//       {
-//         option: "B",
-//         text: "The ability of a flex item to shrink if the size of the container is too small."
-//       },
-//       {
-//         option: "C",
-//         text: "The minimum pixel threshold an element can reach during compression."
-//       },
-//       {
-//         option: "D",
-//         text: "The outer margin spacing applied when items spill over into new lines."
-//       }
-//     ],
-//     answer: "B"
-//   },
-//   {
-//     id: 4,
-//     questionText: "What is a primary architectural advantage of utilizing Next.js App Router?",
-//     options: [
-//       {
-//         option: "A",
-//         text: "It eliminates the requirement for writing backend or database connections entirely."
-//       },
-//       {
-//         option: "B",
-//         text: "It supports React Server Components natively to reduce client-side bundle sizes."
-//       },
-//       {
-//         option: "C",
-//         text: "It automatically converts all TypeScript syntax into raw assembly instructions."
-//       },
-//       {
-//         option: "D",
-//         text: "It enforces client-only page loading to accelerate localized calculations."
-//       }
-//     ],
-//     answer: "B"
-//   },
-//   {
-//     id: 5,
-//     questionText: "Which HTTP status code represents a resource that has permanently moved?",
-//     options: [
-//       {
-//         option: "A",
-//         text: "301 Moved Permanently"
-//       },
-//       {
-//         option: "B",
-//         text: "302 Found / Temporary Redirect"
-//       },
-//       {
-//         option: "C",
-//         text: "404 Not Found"
-//       },
-//       {
-//         option: "D",
-//         text: "502 Bad Gateway"
-//       }
-//     ],
-//     answer: "A"
-//   }
-// ];
-
 interface answer {
   id: number,
   option: string
@@ -184,7 +65,7 @@ export default function Braintestingui({ groundid, ques }: propstype) {
 
   if (quizComplete) {
     function handlegoback() {
-      window.history.back();
+      router.push(`/ground/${groundid}`)
     }
     const results: result[] = [];
 

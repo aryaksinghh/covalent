@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useUserState } from '@/states/userState'
 import { useRouter } from 'next/navigation'
+import toast, { Toaster } from "react-hot-toast";
 
 const Navbar = () => {
     const [ismenu, setismenu] = useState<boolean>(false);
@@ -21,6 +22,7 @@ const Navbar = () => {
         setIsDropdownOpen(false);
         await logoutUser();
         router.refresh();
+        toast.success('Logged out!')
     }
 
     const isUserLoggedIn = !!name || !!email;
@@ -40,6 +42,15 @@ const Navbar = () => {
 
     return (
         <nav className='w-screen h-17 border-b-1 font-source relative flex justify-between items-center px-7' ref={dropdownRef}>
+             <Toaster position="top-right" toastOptions={{
+                // Define default options
+                className: '',
+                duration: 5000,
+                removeDelay: 1000,
+                style: {
+                    background: '#000000',
+                    color: '#fff',
+                }}} />
             <div className='font-source text-2xl font-extrabold'>Covalent</div>
 
 

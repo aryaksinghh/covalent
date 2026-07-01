@@ -4,47 +4,58 @@ import { createClient } from "@/lib/supabase/server"
 import Alreadytested from "@/components/ui/alreadytested"
 import Groq from "groq-sdk";
 import { Redis } from '@upstash/redis'
+import { notFound } from "next/navigation";
 
 
 interface paramstype {
-    params: Promise<{ id: string }>
+  params: Promise<{ id: string }>
 }
 
 interface optionobj {
-    option: string,
-    text: string
-  }
+  option: string,
+  text: string
+}
 
 interface Question {
-    id: number;
-    questionText: string;
-    options: optionobj[];
-    answer: string
-  }
+  id: number;
+  questionText: string;
+  options: optionobj[];
+  answer: string
+}
 
 export default async function Braintesting({ params }: paramstype) {
-    const { id } = await params;
-    const redis = Redis.fromEnv()
-    let qb:Question;
-   
-    const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  const { id } = await params;
+  const redis = Redis.fromEnv()
+  let qb: Question;
+  if (!id || id === "undefined" || id === "null" || id === "") {
+    return notFound()
+  }
+  const groundobj = await prisma.grounds.findUnique({
+    where: { id },
+    include: { user: true }
+  })
+  if (groundobj?.user.id != user?.id) {
+    notFound();
+  }
 
-    const groundobj = await prisma.grounds.findUnique({
-        where: { id },
-    })
-    const stack = groundobj?.stack;
-    if ((groundobj?.grade || 0) > 0) {
-        return <Alreadytested />
-    }
+  const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
-    const redisFetch:Question|null = await redis.get(`ques:${id}`);
-    if (!redisFetch){
+
+  const stack = groundobj?.stack;
+  if ((groundobj?.grade || 0) > 0) {
+    return <Alreadytested />
+  }
+
+  const redisFetch: Question | null = await redis.get(`ques:${id}`);
+  if (!redisFetch) {
 
     const chatcomp = await groq.chat.completions.create({
-        messages : [
-            {
-              role: "system",
-              content: `
+      messages: [
+        {
+          role: "system",
+          content: `
           You are a senior ${stack} engineer, technical interviewer, and educator.
           
           Your task is to generate high-quality multiple-choice questions that accurately assess a developer's knowledge and practical skill level.
@@ -99,10 +110,10 @@ export default async function Braintesting({ params }: paramstype) {
           - answer must contain only the correct option letter.
           - Exactly one option must be correct.
           `
-            },
-            {
-              role: "user",
-              content: `
+        },
+        {
+          role: "user",
+          content: `
           Technology: ${stack}
           Question Count: 5
           Purpose: Skill Assessment
@@ -116,19 +127,19 @@ export default async function Braintesting({ params }: paramstype) {
           
           Generate the questions now.
           `
-            }
-          ],
-        model: "openai/gpt-oss-20b",
+        }
+      ],
+      model: "openai/gpt-oss-120b",
     });
     const res = chatcomp.choices[0]?.message?.content || "";
     const quesobject = JSON.parse(res);
     await redis.set(`ques:${id}`, quesobject)
     qb = quesobject
-} else{
+  } else {
     qb = redisFetch
-}
+  }
 
-    
 
-    return <Braintestingui groundid={id} ques={qb} />
+
+  return <Braintestingui groundid={id} ques={qb} />
 }

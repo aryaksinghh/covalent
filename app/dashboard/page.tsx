@@ -9,16 +9,17 @@ export default async function Dashboard(){
   if(!user){
     return <NoUserPage/>
   }
-  const sessions = await prisma.sessions.findMany({
+  const grounds = await prisma.grounds.findMany({
     where:{userid:user.id},
-    include: {
-      ground: true,
+    orderBy: {
+      createdAt: "desc",
     },
+    take: 3,
   })
   const notebook = await prisma.notebook.findMany({
     where:{userid:user.id},
   })
   return(
-    <Dashboardui session={sessions} notebooks={notebook}/>
+    <Dashboardui ground={grounds} notebooks={notebook}/>
   )
 }

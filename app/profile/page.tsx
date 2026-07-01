@@ -4,6 +4,7 @@ import InfoBar from "@/components/ui/infobar";
 import Sidebar from "@/components/ui/sidebar";
 import { useUserState } from "@/states/userState";
 import Image from "next/image";
+import toast, { Toaster } from "react-hot-toast";
 
 interface ProfileDetails {
     name: string | undefined;
@@ -69,6 +70,7 @@ export default function Profile() {
                     })
                 })
             setIsSaving(false);
+            toast.success('Profile Updated')
             setIsEditModalOpen(false);
             settriggereffect(!triggereffect);
         } catch (error) {
@@ -79,6 +81,16 @@ export default function Profile() {
 
     return (
         <div className="bg-[#f0f0f0] w-full min-h-screen font-source text-black antialiased">
+            <Toaster position="top-right" toastOptions={{
+                // Define default options
+                className: '',
+                duration: 5000,
+                removeDelay: 1000,
+                style: {
+                    background: '#000000',
+                    color: '#fff',
+                }}} />
+
             <InfoBar onMenuClick={() => setIsSidebarOpen(true)} Name={name} FetchUser={fetchUser} />
 
             <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} Avatar={avatar} logout={logoutUser} />
@@ -126,43 +138,43 @@ export default function Profile() {
             </main>
 
             {/* Modal remains the same structure but updated with email locked */}
-            {isEditModalOpen && (
-                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-                    <div className="bg-white border-4 border-black w-full max-w-lg p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-                        <h2 className="text-2xl font-black uppercase mb-6 border-b-4 border-black pb-2">Edit Details</h2>
-                        <form onSubmit={handleFormSubmit} className="space-y-4">
-                            <div>
-                                <label className="block text-xs font-bold mb-1">Name</label>
-                                <input className="w-full border-2 border-black p-3 font-bold" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
-                            </div>
-                            <div>
-                                <label className="block text-xs font-bold mb-1 text-gray-400">Email (Cannot be changed)</label>
-                                <input className="w-full border-2 border-black p-3 bg-gray-100 cursor-not-allowed font-bold" value={formData.email} disabled />
-                            </div>
-                            <div className="grid grid-cols-2 gap-4">
+                {isEditModalOpen && (
+                    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+                        <div className="bg-white border-4 border-black w-full max-w-lg p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+                            <h2 className="text-2xl font-black uppercase mb-6 border-b-4 border-black pb-2">Edit Details</h2>
+                            <form onSubmit={handleFormSubmit} className="space-y-4">
                                 <div>
-                                    <label className="block text-xs font-bold mb-1">Role</label>
-                                    <input className="w-full border-2 border-black p-3 font-bold" value={formData.role} onChange={(e) => setFormData({ ...formData, role: e.target.value })} />
+                                    <label className="block text-xs font-bold mb-1">Name</label>
+                                    <input className="w-full border-2 border-black p-3 font-bold" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
                                 </div>
                                 <div>
-                                    <label className="block text-xs font-bold mb-1">Country</label>
-                                    <input className="w-full border-2 border-black p-3 font-bold" value={formData.country} onChange={(e) => setFormData({ ...formData, country: e.target.value })} />
+                                    <label className="block text-xs font-bold mb-1 text-gray-400">Email (Cannot be changed)</label>
+                                    <input className="w-full border-2 border-black p-3 bg-gray-100 cursor-not-allowed font-bold" value={formData.email} disabled />
                                 </div>
-                            </div>
-                            <div>
-                                <label className="block text-xs font-bold mb-1">Experience</label>
-                                <input className="w-full border-2 border-black p-3 font-bold" value={formData.experience} onChange={(e) => setFormData({ ...formData, experience: e.target.value })} />
-                            </div>
-                            <div className="flex gap-4 pt-4">
-                                <button type="button" onClick={() => setIsEditModalOpen(false)} className="flex-1 cursor-pointer border-2 border-black py-3 font-bold uppercase hover:bg-gray-100">Cancel</button>
-                                <button type="submit" className="flex-1 bg-green-400 border-2 border-black cursor-pointer py-3 font-black uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                                    {isSaving ? "Saving..." : "Save"}
-                                </button>
-                            </div>
-                        </form>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-xs font-bold mb-1">Role</label>
+                                        <input className="w-full border-2 border-black p-3 font-bold" value={formData.role} onChange={(e) => setFormData({ ...formData, role: e.target.value })} />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-bold mb-1">Country</label>
+                                        <input className="w-full border-2 border-black p-3 font-bold" value={formData.country} onChange={(e) => setFormData({ ...formData, country: e.target.value })} />
+                                    </div>
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold mb-1">Experience</label>
+                                    <input className="w-full border-2 border-black p-3 font-bold" value={formData.experience} onChange={(e) => setFormData({ ...formData, experience: e.target.value })} />
+                                </div>
+                                <div className="flex gap-4 pt-4">
+                                    <button type="button" onClick={() => setIsEditModalOpen(false)} className="flex-1 cursor-pointer border-2 border-black py-3 font-bold uppercase hover:bg-gray-100">Cancel</button>
+                                    <button type="submit" className="flex-1 bg-green-400 border-2 border-black cursor-pointer py-3 font-black uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                                        {isSaving ? "Saving..." : "Save"}
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                </div>
-            )}
+                )}
         </div>
     );
 }

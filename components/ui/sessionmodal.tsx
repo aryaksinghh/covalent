@@ -20,11 +20,13 @@ export default function CreateSessionModal({
     const [conceptSlides, setConceptSlides] = useState('10');
     const [revisionType, setRevisionType] = useState('random'); // 'random' or 'particular'
     const [particularTopic, setParticularTopic] = useState('');
+    const [iscreating, setiscreating] = useState<boolean>(false);
 
     if (!isOpen) return null;
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setiscreating(true)
         if (!sessionName.trim()) return;
         if (revisionType === 'particular' && !particularTopic.trim()) return;
 
@@ -44,7 +46,8 @@ export default function CreateSessionModal({
             })
             const res = await insertSession.json();
             if (res.status == 201) {
-                 window.location.href = `${process.env.NEXT_PUBLIC_HOST}/ground/${groundid}/session/${res.message.id}/learningengine?type=${revisionType}&ques=${conceptSlides}`
+                setiscreating(false);
+                 window.location.href = `${process.env.NEXT_PUBLIC_HOST}/ground/${groundid}/session/${res.message.id}/learningengine?type=${revisionType}&quesno=${conceptSlides}`
             }
         } catch (error) {
             console.error("error occuring while inserting session", error)
@@ -178,7 +181,7 @@ export default function CreateSessionModal({
                                 type="submit"
                                 className="w-full cursor-pointer bg-black text-white font-black text-xs uppercase tracking-widest py-3 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,0.3)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] transition-all text-center"
                             >
-                                Start Revision
+                                {iscreating? "creating..." : "start revision"}
                             </button>
                         </div>
                     </form>

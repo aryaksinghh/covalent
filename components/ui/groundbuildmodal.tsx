@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useUserState } from '@/states/userState';
+import { useRouter } from 'next/navigation';
 
 // Sub-category mapping data
 const subCategoryData: Record<string, string[]> = {
@@ -18,11 +19,13 @@ interface CreateGroundModalProps {
 }
 
 export default function CreateGroundModal({ isOpen, onClose }: CreateGroundModalProps) {
+  const router = useRouter();
   const [name, setName] = useState('');
   const [category, setCategory] = useState('');
   const [subCategory, setSubCategory] = useState('');
   const [experience, setExperience] = useState('');
   const { fetchUser, id} = useUserState();
+  const [iscreating, setiscreating] = useState<boolean>(false);
   fetchUser();
 
   // Reset sub-category whenever main category changes
@@ -34,6 +37,7 @@ export default function CreateGroundModal({ isOpen, onClose }: CreateGroundModal
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setiscreating(true);
     const sendGroundData = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/ground_insert_db`, {
         method:"POST",
         headers:{"Content-Type": "application/json"},
@@ -45,8 +49,10 @@ export default function CreateGroundModal({ isOpen, onClose }: CreateGroundModal
             userid: id
         })
     })
-    onClose();
     const res = await sendGroundData.json();
+    setiscreating(false);
+    router.push(`/ground/${res.message.id}/braintesting`)
+    onClose();
     if(res.status!=201){
         console.log("error occured while inserting ground data in database", res.message)
     } 
@@ -165,7 +171,7 @@ export default function CreateGroundModal({ isOpen, onClose }: CreateGroundModal
               type="submit"
               className="border-2 cursor-pointer border-black bg-black text-white px-5 py-2 text-xs font-black uppercase tracking-wider hover:bg-zinc-900 transition-colors shadow-[3px_3px_0px_0px_rgba(100,100,100,0.5)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
             >
-              Create Ground
+              {iscreating? "creating...": "create ground"}
             </button>
           </div>
 

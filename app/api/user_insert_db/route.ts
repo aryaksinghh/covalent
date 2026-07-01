@@ -20,8 +20,7 @@ export async function POST(request: NextRequest) {
   
       if (existingUser) {
         return NextResponse.json(
-          { message: "User already exists" },
-          { status: 200 }
+          { message: "User already exists", status:200}
         );
       }
   
@@ -38,8 +37,7 @@ export async function POST(request: NextRequest) {
       });
   
       return NextResponse.json(
-        { message: "User created", user },
-        { status: 201 }
+        { message: user, status: 201 }
       );
     } catch (error) {
       console.error(error);

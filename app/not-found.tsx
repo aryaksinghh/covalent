@@ -39,7 +39,7 @@ export default function NotFound() {
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           
           <Link 
-            href="/"
+            href="/dashboard"
             className="border-2 border-black bg-black text-white px-5 py-2.5 text-xs font-black uppercase tracking-wider hover:bg-zinc-900 transition-all shadow-[3px_3px_0px_0px_rgba(0,0,0,0.2)] inline-block active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
           >
             Return to Dashboard
