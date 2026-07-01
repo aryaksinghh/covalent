@@ -11,8 +11,7 @@ export default function NotFound() {
         
         {/* Decorative Top Bar to mimic a terminal or widget look */}
         <div className="absolute top-0 left-0 right-0 h-7 bg-black text-white text-xs flex items-center px-3 justify-between font-black uppercase tracking-wider">
-          <span>SYSTEM_ERROR_LOG</span>
-          <span>[!]</span>
+         •••
         </div>
 
         {/* Big Code Error */}

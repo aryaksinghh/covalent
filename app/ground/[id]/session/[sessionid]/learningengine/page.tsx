@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server"
 import Groq from "groq-sdk";
 import { Redis } from '@upstash/redis'
 import { notFound } from "next/navigation";
+import FallbackSessionDone from "@/components/ui/fallbacksessiondone";
 
 type ConceptNode = {
     id: number;
@@ -41,6 +42,13 @@ export default async function Learningengine({ searchParams, params }: searchPro
         where: { id },
         include: { session: { where: { id: sessionid } } }
     })
+    if(!groundobj?.session[0] || !groundobj){
+      notFound();
+    }
+
+    if(groundobj?.session[0]?.score){
+        return <FallbackSessionDone/>
+    }
 
     const redisFetch: StudyNode[] | null = await redis.get(`node:${sessionid}`);
     if (!redisFetch) {
