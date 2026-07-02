@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 
 interface FirstPrincipleContent {
@@ -65,6 +65,7 @@ interface sessionfeedback {
 }
 
 
+
 export default function LearningEngineUI({ Nodeworkflow, sid }: paramstypes) {
 
 
@@ -78,6 +79,7 @@ export default function LearningEngineUI({ Nodeworkflow, sid }: paramstypes) {
   const [assessmentStatus, setAssessmentStatus] = useState<"idle" | "success" | "fallback">("idle");
   const [isloading, setisloading] = useState<boolean>(false);
   const [evalFeedback, setevalFeedback] = useState<evalfeedback | null>(null);
+  const [timing, settiming] = useState<number>(0)
 
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [isLocked, setIsLocked] = useState<boolean>(false);
@@ -85,28 +87,46 @@ export default function LearningEngineUI({ Nodeworkflow, sid }: paramstypes) {
   const currentNode = Nodeworkflow[currentIndex];
   const isFinished = currentIndex >= Nodeworkflow.length;
   const isReviewMode = currentIndex < historyIndex;
-  const conceptarr: ConceptNode[] = Nodeworkflow.filter((s:StudyNode)=> s.type == "concept");
+  const conceptarr: ConceptNode[] = Nodeworkflow.filter((s: StudyNode) => s.type == "concept");
   const conceptlength = conceptarr.length
-  const [sessionFeedback, setsessionFeedback] = useState<sessionfeedback>({score:0, xp:conceptlength*4})
+  const [sessionFeedback, setsessionFeedback] = useState<sessionfeedback>({ score: 0, xp: conceptlength * 4 })
+  const currenttime = useRef<number>(0)
 
-  if(isFinished){
-    async function updatesession(){
-      try{
-      const ups = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/session_update_db`, {
-        method:"POST",
-        headers:{"Content-Type": "application/json"},
-        body: JSON.stringify({
-          sessionid: sid,
-          score: sessionFeedback.score
+  useEffect(()=>{
+    currenttime.current = Date.now();
+  }, [])
+  useEffect(() => {
+    if (!isFinished) return;
+
+    const end = Date.now();
+    const duration = end - currenttime.current
+
+    const minutes = Math.floor(duration / 1000 / 60);
+    settiming(minutes)
+
+  }, [isFinished]);
+
+  if (isFinished) {
+
+    async function updatesession() {
+      try {
+        const ups = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/session_update_db`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            sessionid: sid,
+            score: sessionFeedback.score,
+            timespentmin: timing,
+            iscompleted: true
+          })
         })
-      })
-      const res = await ups.json();
-      if(ups.ok){
-        console.log("updated")
+        const res = await ups.json();
+        if (ups.ok) {
+          console.log("updated")
+        }
+      } catch (error) {
+        console.error("error occured while updating session for the score", error)
       }
-    } catch(error){
-      console.error("error occured while updating session for the score", error)
-    }
 
     }
     updatesession();
@@ -153,7 +173,7 @@ export default function LearningEngineUI({ Nodeworkflow, sid }: paramstypes) {
     if (selectedOption === null || isLocked) return;
     setIsLocked(true);
     if (currentNode?.type === "mcq" && selectedOption === currentNode.correctIndex) {
-      setsessionFeedback((prev)=>({...prev, score: prev.score + 1}));
+      setsessionFeedback((prev) => ({ ...prev, score: prev.score + 1 }));
     }
   };
 
@@ -167,22 +187,22 @@ export default function LearningEngineUI({ Nodeworkflow, sid }: paramstypes) {
   const evaluateExplanation = async () => {
     setisloading(true)
     const evaluate_explanation = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/fpt_explain_evaluate`, {
-      method:"POST",
-      headers:{"Content-Type": "application/json"},
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         title: currentNode.type == "concept" ? currentNode.title : null,
         explanation: userExplanation
       })
     })
     const res = await evaluate_explanation.json();
-    if(evaluate_explanation.ok){
+    if (evaluate_explanation.ok) {
       setevalFeedback(res.data)
       setAssessmentStatus("success")
       setisloading(false)
     } else {
       setAssessmentStatus("fallback")
       setisloading(false)
-      console.log("error occured while evalaution user explanation",res.error)
+      console.log("error occured while evalaution user explanation", res.error)
     }
   };
 
@@ -379,7 +399,7 @@ export default function LearningEngineUI({ Nodeworkflow, sid }: paramstypes) {
             </div>
 
             {/* Metrics Grid: Score & XP */}
-            <div className="grid grid-cols-2 gap-4 max-w-sm mx-auto">
+            <div className="grid grid-cols-3 gap-4 max-w-md mx-auto">
 
               {/* MCQ Score Box */}
               <div className="bg-white border-4 border-black p-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex flex-col justify-center items-center">
@@ -401,6 +421,15 @@ export default function LearningEngineUI({ Nodeworkflow, sid }: paramstypes) {
                   <span className="text-sm animate-bounce">▲</span> +{sessionFeedback.xp}
                 </span>
                 <span className="text-[10px] font-bold mt-1 text-emerald-700 uppercase">XP Gained</span>
+              </div>
+              <div className="bg-white border-4 border-black p-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex flex-col justify-center items-center">
+                <span className="text-[10px] uppercase font-extrabold text-neutral-500 tracking-wider block mb-1">
+                  time spent
+                </span>
+                <span className="text-2xl font-black tracking-tight text-emerald-600 flex items-center gap-1">
+                  <span className="text-sm animate-bounce">▲</span> {timing} m
+                </span>
+                <span className="text-[10px] font-bold mt-1 text-emerald-700 uppercase">in minutes</span>
               </div>
 
             </div>
@@ -622,23 +651,23 @@ export default function LearningEngineUI({ Nodeworkflow, sid }: paramstypes) {
               {modalStep === 3 && (
                 <div className="space-y-4 animate-in zoom-in-95 duration-200">
                   {isloading ? (
-                  <div className="bg-white border-4 border-black p-5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] space-y-3">
-                    <h4 className="text-xl font-black uppercase border-b-2 border-black pb-1">Loading...</h4>
-                    <p className="text-sm leading-relaxed text-neutral-800 font-mono">
-                    Please wait while we process your input.
-                    </p>
-                  </div>
+                    <div className="bg-white border-4 border-black p-5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] space-y-3">
+                      <h4 className="text-xl font-black uppercase border-b-2 border-black pb-1">Loading...</h4>
+                      <p className="text-sm leading-relaxed text-neutral-800 font-mono">
+                        Please wait while we process your input.
+                      </p>
+                    </div>
                   ) : assessmentStatus === "success" ? (
-                  <div className="bg-white border-4 border-black p-5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] space-y-3">
-                    <h4 className="text-xl font-black uppercase border-b-2 border-black pb-1">SCORE {evalFeedback?.score}</h4>
-                    <p className="text-sm leading-relaxed text-neutral-800 font-mono">
-                    {evalFeedback?.appreciation}
-                    </p>
-                  </div>
+                    <div className="bg-white border-4 border-black p-5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] space-y-3">
+                      <h4 className="text-xl font-black uppercase border-b-2 border-black pb-1">SCORE {evalFeedback?.score}</h4>
+                      <p className="text-sm leading-relaxed text-neutral-800 font-mono">
+                        {evalFeedback?.appreciation}
+                      </p>
+                    </div>
                   ) : (
-                  <div className="bg-white border-4 border-black p-5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] space-y-3">
-                    <h1>Something went wrong with system</h1>
-                  </div>
+                    <div className="bg-white border-4 border-black p-5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] space-y-3">
+                      <h1>Something went wrong with system</h1>
+                    </div>
                   )}
                 </div>
               )}

@@ -1,8 +1,14 @@
 import React from 'react';
 import Link from 'next/link';
 
-export default function FallbackSessionDone() {
+interface propstypes {
+  groundid: string,
+  sid: string
+}
+
+export default function FallbackSessionDone({groundid, sid}: propstypes) {
   return (
+    <div className='flex justify-center items-center w-screen h-screen'>
     <div className="w-full max-w-md bg-gray-50 p-6 flex justify-center items-center">
       {/* Neo-brutalist card container: 
         Sharp corners, thick black border, and a solid offset black shadow 
@@ -13,12 +19,13 @@ export default function FallbackSessionDone() {
         </p>
         
         <Link 
-          href="/session-feedback"
+          href={`/ground/${groundid}/session/${sid}`}
           className="bg-black text-white font-mono text-xs md:text-sm font-bold px-6 py-3 border-2 border-black hover:bg-white hover:text-black transition-colors duration-200 text-center uppercase tracking-wide inline-block"
         >
-          Session Feedback Page
+          Session Page
         </Link>
       </div>
+    </div>
     </div>
   );
 }

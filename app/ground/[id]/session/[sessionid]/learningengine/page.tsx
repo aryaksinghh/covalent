@@ -46,8 +46,8 @@ export default async function Learningengine({ searchParams, params }: searchPro
       notFound();
     }
 
-    if(groundobj?.session[0]?.score){
-        return <FallbackSessionDone/>
+    if(groundobj?.session[0]?.iscompleted){
+        return <FallbackSessionDone groundid={id} sid={sessionid}/>
     }
 
     const redisFetch: StudyNode[] | null = await redis.get(`node:${sessionid}`);

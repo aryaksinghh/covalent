@@ -53,6 +53,8 @@ model sessions{
   type String
   score Int @default(0)
   xp Int @default(0)
+  iscompleted Boolean @default(false) 
+  timespentmin Int @default(0)
   createdAt DateTime  @default(now())
   questions String[] @default([])
   answers String[] @default([])

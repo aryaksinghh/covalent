@@ -14,12 +14,16 @@ export async function POST(request: NextRequest) {
 
       interface dataobjtype {
         score?: number,
-        xp?: number
+        xp?: number,
+        timespentmin? : number,
+        iscompleted?: boolean 
       }
   
       const dataobj: dataobjtype = {}
       if(body.score) dataobj.score = body.score;
       if(body.grade) dataobj.xp = body.xp
+      if(body.timespentmin) dataobj.timespentmin = body.timespentmin
+      if(body.iscompleted) dataobj.iscompleted = body.iscompleted
 
       const up = await prisma.sessions.update({
         where: {
