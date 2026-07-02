@@ -25,7 +25,7 @@ export default function Sidebar({ isOpen, onClose, Avatar, logout }: SidebarProp
       <div className={`fixed top-0 left-0 h-[calc(100vh)] w-72 bg-[#eeeeee] border-r-2 border-black z-50 transform transition-transform duration-300 ease-in-out font-mono ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         
         <div className="p-4 border-b-2 border-black flex justify-between items-center bg-white">
-          <span className="font-bold text-xs uppercase tracking-tighter text-zinc-500 underline decoration-black">System Menu</span>
+          <span className="font-bold text-xs uppercase tracking-tighter text-zinc-500 underline decoration-black">Menu</span>
           <button 
             onClick={onClose}
             className="border-2 cursor-pointer border-black p-1 hover:bg-black hover:text-white transition-colors"
