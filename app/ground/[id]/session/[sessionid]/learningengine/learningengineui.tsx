@@ -3,6 +3,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { a11yDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+
 
 interface FirstPrincipleContent {
   title: string;
@@ -39,6 +42,7 @@ type ConceptNode = {
   type: "concept";
   title: string;
   solution: string;
+  code: { language: string | null, codeString: string | null }
 };
 
 type MCQNode = {
@@ -48,6 +52,7 @@ type MCQNode = {
   options: string[];
   correctIndex: number;
   explanation: string;
+  code: { language: string | null, codeString: string | null }
 };
 
 type StudyNode = ConceptNode | MCQNode;
@@ -94,7 +99,7 @@ export default function LearningEngineUI({ Nodeworkflow, sid, groundid }: params
   const [sessionFeedback, setsessionFeedback] = useState<sessionfeedback>({ score: 0, xp: conceptlength * 4 })
   const currenttime = useRef<number>(0)
 
-  useEffect(()=>{
+  useEffect(() => {
     currenttime.current = Date.now();
   }, [])
   useEffect(() => {
@@ -234,6 +239,7 @@ export default function LearningEngineUI({ Nodeworkflow, sid, groundid }: params
                   </span>
                   <h1 className="text-4xl font-black uppercase tracking-tight mt-3">
                     {currentNode.title}
+                    
                   </h1>
                 </div>
 
@@ -241,7 +247,12 @@ export default function LearningEngineUI({ Nodeworkflow, sid, groundid }: params
                   <h3 className="text-xs mt-3 uppercase font-extrabold text-black/60 tracking-wider">Solution:</h3>
                   <p className="text-lg leading-relaxed font-medium text-neutral-800">
                     {currentNode.solution}
+                    
                   </p>
+                  <h1 className="font-bold">Code Example :</h1>
+                  {(currentNode.code.codeString) && <SyntaxHighlighter language={currentNode.code.language || ""} style={a11yDark}>
+                      {currentNode.code.codeString}
+                    </SyntaxHighlighter>}
                 </div>
 
                 {/* Self-Assessment Interaction */}
@@ -280,6 +291,10 @@ export default function LearningEngineUI({ Nodeworkflow, sid, groundid }: params
                   <h2 className="text-2xl font-black tracking-tight mt-3">
                     {currentNode.question}
                   </h2>
+                  <h1 className="font-bold mt-3 mb-3">Code:</h1>
+                  {(currentNode.code.codeString) && <SyntaxHighlighter language={currentNode.code.language || ""} style={a11yDark}>
+                      {currentNode.code.codeString}
+                    </SyntaxHighlighter>}
                 </div>
 
                 <div className="space-y-3 pt-2">
@@ -594,16 +609,9 @@ export default function LearningEngineUI({ Nodeworkflow, sid, groundid }: params
                         </h4>
 
                         {/* Code Block Window */}
-                        <div className="bg-neutral-950 text-neutral-200 p-4 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] overflow-x-auto relative group">
-                          {fptObj.codeExample?.language && (
-                            <span className="absolute top-2 right-2 text-[10px] font-mono uppercase bg-neutral-800 text-neutral-400 px-1.5 py-0.5 border border-neutral-700 select-none">
-                              {fptObj.codeExample.language}
-                            </span>
-                          )}
-                          <pre className="font-mono text-xs leading-relaxed selection:bg-neutral-700 whitespace-pre">
-                            <code>{fptObj.codeExample.code}</code>
-                          </pre>
-                        </div>
+                        <SyntaxHighlighter language={currentNode.code.language || ""} style={a11yDark}>
+                      {fptObj.codeExample.code}
+                    </SyntaxHighlighter>
 
                         {/* Explanation Section */}
                         {fptObj.codeExample?.explanation && (

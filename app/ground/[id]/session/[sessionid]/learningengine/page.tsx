@@ -11,6 +11,7 @@ type ConceptNode = {
     type: "concept";
     title: string;
     solution: string;
+    code: { language: string | null, codeString: string | null }
 };
 
 type MCQNode = {
@@ -20,6 +21,7 @@ type MCQNode = {
     options: string[];
     correctIndex: number;
     explanation: string;
+    code: { language: string | null, codeString: string | null }
 };
 
 type StudyNode = ConceptNode | MCQNode;
@@ -42,13 +44,28 @@ export default async function Learningengine({ searchParams, params }: searchPro
         where: { id },
         include: { session: { where: { id: sessionid } } }
     })
-    if(!groundobj?.session[0] || !groundobj){
-      notFound();
+    if (!groundobj?.session[0] || !groundobj) {
+        notFound();
     }
 
-    if(groundobj?.session[0]?.iscompleted){
-        return <FallbackSessionDone groundid={id} sid={sessionid}/>
+    if (groundobj?.session[0]?.iscompleted) {
+        return <FallbackSessionDone groundid={id} sid={sessionid} />
     }
+
+    const sessions_fetched = await prisma.sessions.findMany({
+        where: { groundid: id },
+        select: {
+            topics: true
+        }
+    })
+
+    const topics: string[] = [];
+
+    sessions_fetched.forEach((t) => {
+        t.topics.forEach((tt) => {
+            topics.push(tt)
+        })
+    })
 
     const redisFetch: StudyNode[] | null = await redis.get(`node:${sessionid}`);
     if (!redisFetch) {
@@ -129,6 +146,7 @@ export default async function Learningengine({ searchParams, params }: searchPro
               - Avoid unnecessary theory.
               - Avoid huge paragraphs.
               - Focus on retention.
+              - code snippen according
               
               QUESTION RULES
               
@@ -143,6 +161,9 @@ export default async function Learningengine({ searchParams, params }: searchPro
               
               Questions must:
               
+              - have code object only if suitable dont add without any reson.
+              - if question is to ask output from code then give that code into code obj not as a string in ques
+              - questions should be totally based on topics revised here
               - Verify understanding.
               - Reinforce memory.
               - Test practical thinking.
@@ -182,7 +203,8 @@ export default async function Learningengine({ searchParams, params }: searchPro
                   "id": 1,
                   "type": "concept",
                   "title": "",
-                  "solution": ""
+                  "solution": "",
+                  "code": { language:string|null, codeString:string|null}
                 },
                 {
                   "id": 2,
@@ -191,11 +213,23 @@ export default async function Learningengine({ searchParams, params }: searchPro
                   "options": ["","","",""],
                   "correctIndex": 0,
                   "explanation": ""
+                  "code": { language:string|null, codeString:string|null}
                 }
               ]
               
               VALIDATION
-              
+              - Every item must contain a code object.
+- code must always contain:
+  - language
+  - codeString
+- If no code is needed:
+  - language = null
+  - codeString = null
+- If code is provided:
+  - language must be the programming language (e.g. javascript, typescript, python, java, cpp, html, css).
+  - codeString must contain only the code.
+  - also add comments in codeString to understand more clearly
+- Never omit the code object.
               - ids must be sequential.
               - type must be either "concept" or "mcq".
               - Every concept requires title and solution.
@@ -222,13 +256,17 @@ export default async function Learningengine({ searchParams, params }: searchPro
               Current Skill Grade:
               ${groundobj?.grade}
               
+              topics discovered already:
+              ${topics}
               
               Total Concepts Required:
               ${quesno}
               
               Additional Requirements:
               
+              - give questions different or from different approach from what topics revised. dont repeat. i attached topics learned above
               - Select the most important concepts for this topic and skill level.
+              - include code output concepts and ques which used in real life if suitable and according to schema give the code
               - Prioritize concepts developers actually use in projects.
               - Concepts should build progressively.
               - Explanations should be easy to understand.
