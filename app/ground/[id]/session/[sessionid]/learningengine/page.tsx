@@ -287,7 +287,7 @@ export default async function Learningengine({ searchParams, params }: searchPro
     }
 
     return (
-        <Learningengineui Nodeworkflow={slidedata} sid={sessionid} />
+        <Learningengineui Nodeworkflow={slidedata} groundid={id} sid={sessionid} />
     )
 }
 

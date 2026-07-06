@@ -42,10 +42,6 @@ export default function Groundpageui({ground}:GroundInfo) {
 
 
 
-  // Handle the custom "Create Session" binary options display state
- 
-
-
   return (<>
   {isOpen && <CreateSessionModal isOpen onClose={()=> setisOpen(false)} currentTechStack={ground.stack} groundid={ground.id}/>}
   <InfoBar onMenuClick={() => setIsSidebarOpen(true)} Name={name} FetchUser={fetchUser} />
@@ -91,7 +87,7 @@ export default function Groundpageui({ground}:GroundInfo) {
 
             {/* Grade Columns Reference Matrix */}
             <div className="lg:col-span-4">
-              <span className="block text-xs font-black uppercase tracking-wider mb-2">Grade Matrix (Provided by your evaluation test)</span>
+              <span className="block text-xs font-black uppercase tracking-wider mb-2">Grade (Provided by your evaluation test)</span>
               <div className="flex border-2 border-black">
                 {/* Giant current grade score block */}
                 <div className="w-1/3 bg-white flex items-center justify-center text-4xl font-black border-r-2 border-black p-4">
@@ -134,6 +130,7 @@ export default function Groundpageui({ground}:GroundInfo) {
 
           {/* Mapping rows into clean boxy blocks */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {ground.session.length ==0 && <div className='mt-6 text-2xl text-black'>No session is created yet</div>}
             {ground.session.map((session) => (
               <div 
                 key={session.id} 

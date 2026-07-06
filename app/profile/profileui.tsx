@@ -16,12 +16,12 @@ interface User {
     experience: string | "";
     avatar: string | "";
     xp: number;
-  }
+}
 interface propsUser {
-   profileDetails: User
+    profileDetails: User
 }
 
-export default function Profile({profileDetails}: propsUser) {
+export default function Profile({ profileDetails }: propsUser) {
     const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
     const [triggereffect, settriggereffect] = useState<boolean>(true);
@@ -72,7 +72,8 @@ export default function Profile({profileDetails}: propsUser) {
                 style: {
                     background: '#000000',
                     color: '#fff',
-                }}} />
+                }
+            }} />
 
             <InfoBar onMenuClick={() => setIsSidebarOpen(true)} Name={name} FetchUser={fetchUser} />
 
@@ -122,43 +123,89 @@ export default function Profile({profileDetails}: propsUser) {
             </main>
 
             {/* Modal remains the same structure but updated with email locked */}
-                {isEditModalOpen && (
-                    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-                        <div className="bg-white border-4 border-black w-full max-w-lg p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-                            <h2 className="text-2xl font-black uppercase mb-6 border-b-4 border-black pb-2">Edit Details</h2>
-                            <form onSubmit={handleFormSubmit} className="space-y-4">
+            {isEditModalOpen && (
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+                    <div className="bg-white border-4 border-black w-full max-w-lg p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+                        <h2 className="text-2xl font-black uppercase mb-6 border-b-4 border-black pb-2">Edit Details</h2>
+                        <form onSubmit={handleFormSubmit} className="space-y-4">
+                            <div>
+                                <label className="block text-xs font-bold mb-1">Name</label>
+                                <input
+                                    className="w-full border-2 border-black p-3 font-bold"
+                                    value={formData.name}
+                                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-xs font-bold mb-1 text-gray-400">
+                                    Email (Cannot be changed)
+                                </label>
+                                <input
+                                    className="w-full border-2 border-black p-3 bg-gray-100 cursor-not-allowed font-bold"
+                                    value={formData.email}
+                                    disabled
+                                />
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-xs font-bold mb-1">Name</label>
-                                    <input className="w-full border-2 border-black p-3 font-bold" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
+                                    <label className="block text-xs font-bold mb-1">Role</label>
+                                    <input
+                                        className="w-full border-2 border-black p-3 font-bold"
+                                        value={formData.role}
+                                        onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                                    />
                                 </div>
+
                                 <div>
-                                    <label className="block text-xs font-bold mb-1 text-gray-400">Email (Cannot be changed)</label>
-                                    <input className="w-full border-2 border-black p-3 bg-gray-100 cursor-not-allowed font-bold" value={formData.email} disabled />
+                                    <label className="block text-xs font-bold mb-1">Country</label>
+                                    <input
+                                        className="w-full border-2 border-black p-3 font-bold"
+                                        value={formData.country}
+                                        onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+                                    />
                                 </div>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="block text-xs font-bold mb-1">Role</label>
-                                        <input className="w-full border-2 border-black p-3 font-bold" value={formData.role} onChange={(e) => setFormData({ ...formData, role: e.target.value })} />
-                                    </div>
-                                    <div>
-                                        <label className="block text-xs font-bold mb-1">Country</label>
-                                        <input className="w-full border-2 border-black p-3 font-bold" value={formData.country} onChange={(e) => setFormData({ ...formData, country: e.target.value })} />
-                                    </div>
-                                </div>
-                                <div>
-                                    <label className="block text-xs font-bold mb-1">Experience</label>
-                                    <input className="w-full border-2 border-black p-3 font-bold" value={formData.experience} onChange={(e) => setFormData({ ...formData, experience: e.target.value })} />
-                                </div>
-                                <div className="flex gap-4 pt-4">
-                                    <button type="button" onClick={() => setIsEditModalOpen(false)} className="flex-1 cursor-pointer border-2 border-black py-3 font-bold uppercase hover:bg-gray-100">Cancel</button>
-                                    <button type="submit" className="flex-1 bg-green-400 border-2 border-black cursor-pointer py-3 font-black uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                                        {isSaving ? "Saving..." : "Save"}
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
+                            </div>
+
+                            <div className="relative">
+                                <select
+                                    className="w-full border-2 cursor-pointer border-black p-3 pr-10 font-bold appearance-none bg-white"
+                                    value={formData.experience}
+                                    onChange={(e) =>
+                                        setFormData({ ...formData, experience: e.target.value })
+                                    }
+                                >
+                                    <option value="Beginner">Beginner</option>
+                                    <option value="Intermediate">Intermediate</option>
+                                    <option value="Expert">Expert</option>
+                                </select>
+
+                                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sm">
+                                    ↓
+                                </span>
+                            </div>
+
+                            <div className="flex gap-4 pt-4">
+                                <button
+                                    type="button"
+                                    onClick={() => setIsEditModalOpen(false)}
+                                    className="flex-1 cursor-pointer border-2 border-black py-3 font-bold uppercase hover:bg-gray-100"
+                                >
+                                    Cancel
+                                </button>
+
+                                <button
+                                    type="submit"
+                                    className="flex-1 bg-green-400 border-2 border-black cursor-pointer py-3 font-black uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                                >
+                                    {isSaving ? "Saving..." : "Save"}
+                                </button>
+                            </div>
+                        </form>
                     </div>
-                )}
+                </div>
+            )}
         </div>
     );
 }

@@ -1,8 +1,9 @@
-'use client';
+'use client'
 
 import React, { useState, useEffect } from 'react';
 import { useUserState } from '@/states/userState';
 import { useRouter } from 'next/navigation';
+import toast, { Toaster } from "react-hot-toast";
 
 // Sub-category mapping data
 const subCategoryData: Record<string, string[]> = {
@@ -24,7 +25,7 @@ export default function CreateGroundModal({ isOpen, onClose }: CreateGroundModal
   const [category, setCategory] = useState('');
   const [subCategory, setSubCategory] = useState('');
   const [experience, setExperience] = useState('');
-  const { fetchUser, id} = useUserState();
+  const { fetchUser, id } = useUserState();
   const [iscreating, setiscreating] = useState<boolean>(false);
   fetchUser();
 
@@ -39,37 +40,49 @@ export default function CreateGroundModal({ isOpen, onClose }: CreateGroundModal
     e.preventDefault();
     setiscreating(true);
     const sendGroundData = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/ground_insert_db`, {
-        method:"POST",
-        headers:{"Content-Type": "application/json"},
-        body: JSON.stringify({
-            name,
-            category,
-            stack: subCategory,
-            experience,
-            userid: id
-        })
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name,
+        category,
+        stack: subCategory,
+        experience,
+        userid: id
+      })
     })
     const res = await sendGroundData.json();
-    setiscreating(false);
-    router.push(`/ground/${res.message.id}/braintesting`)
-    onClose();
-    if(res.status!=201){
-        console.log("error occured while inserting ground data in database", res.message)
-    } 
-    
+    if (sendGroundData.status == 201) {
+      toast.success('Ground is created')
+      setiscreating(false);
+      router.push(`/ground/${res.message.id}/braintesting`)
+      onClose();
+    } else {
+      console.error("error occured while inserting ground data in database", res.message)
+      toast.error("Something went wrong")
+    }
   };
 
-  return (
+  return (<>
+    <Toaster position="top-right" toastOptions={{
+      // Define default options
+      className: '',
+      duration: 5000,
+      removeDelay: 1000,
+      style: {
+        background: '#000000',
+        color: '#fff',
+      }
+    }} />
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 font-mono">
       {/* Modal Box */}
       <div className="relative w-full max-w-md bg-[#f3f3f3] border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] p-6 transition-all">
-        
+
         {/* Header */}
         <div className="flex justify-between items-center mb-6 pb-2 border-b-2 border-black">
           <h2 className="text-xl font-black uppercase tracking-wider text-black">
             CREATE GROUND
           </h2>
-          <button 
+          <button
             onClick={onClose}
             className="border-2 border-black cursor-pointer bg-white px-2 py-0.5 text-sm font-bold text-black hover:bg-black hover:text-white transition-colors shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
           >
@@ -79,7 +92,7 @@ export default function CreateGroundModal({ isOpen, onClose }: CreateGroundModal
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
-          
+
           {/* Ground Name Input */}
           <div className="flex flex-col gap-1.5">
             <label className="text-xs font-black uppercase text-black tracking-wide">
@@ -171,12 +184,12 @@ export default function CreateGroundModal({ isOpen, onClose }: CreateGroundModal
               type="submit"
               className="border-2 cursor-pointer border-black bg-black text-white px-5 py-2 text-xs font-black uppercase tracking-wider hover:bg-zinc-900 transition-colors shadow-[3px_3px_0px_0px_rgba(100,100,100,0.5)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
             >
-              {iscreating? "creating...": "create ground"}
+              {iscreating ? "creating..." : "create ground"}
             </button>
           </div>
 
         </form>
       </div>
     </div>
-  );
+  </>);
 }

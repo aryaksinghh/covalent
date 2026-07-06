@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
       });
   
       return NextResponse.json(
-        { message: ground, status:201 },
+        { message: ground},{status:201}
       );
     } catch (error) {
       console.error(error);

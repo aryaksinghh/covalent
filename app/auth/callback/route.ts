@@ -15,20 +15,26 @@ export async function GET(request: Request) {
     const supabase = await createClient()
     const { error } = await supabase.auth.exchangeCodeForSession(code)
     if (!error) {
-      const {data:{user}} = await supabase.auth.getUser();
-      fetch(`${process.env.NEXT_PUBLIC_HOST}/api/user_insert_db`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: user?.user_metadata.name,
-          email: user?.user_metadata.email,
-          id: user?.id,
-          avatar: user?.user_metadata.avatar_url,
-        }),
-      })
-
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const fetch_existing_user = await prisma.user.findUnique({ where: { id: user.id } })
+        if (!fetch_existing_user) {
+          const inserting_user = await prisma.user.create({
+            data: {
+              id: user.id,
+              name: user.user_metadata.name,
+              email: user.email || "",
+              avatar: user.user_metadata.avatar_url,
+              role: "none",
+              country: "none",
+              experience: "none"
+            },
+          });
+          if(!inserting_user) console.log("error inserting the user in db") 
+        }
+      } else{
+        console.log("user not found from session")
+      }
       const forwardedHost = request.headers.get('x-forwarded-host')
       const isLocalEnv = process.env.NODE_ENV === 'development'
       if (isLocalEnv) {

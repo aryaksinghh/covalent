@@ -4,9 +4,8 @@ import InfoBar from "@/components/ui/infobar";
 import Sidebar from "@/components/ui/sidebar";
 import { useUserState } from "@/states/userState";
 import Link from "next/link";
-import { LinkIcon, Router } from 'lucide-react';
+import { LinkIcon } from 'lucide-react';
 import CreateGroundModal from "@/components/ui/groundbuildmodal";
-
 
 interface Ground {
   id: string;
@@ -18,26 +17,12 @@ interface Ground {
   createdAt: Date;
 }
 
-interface Session {
-  id: string;
-  ground: Ground;
-  groundid: string;
-  name: string;
-  userid: string;
-  type: string;
-  score: number;
-  questions: string[];
-  answers: string[];
-  topics: string[];
-  topic_level: string[];
-}
-
 interface DashboarduiProps {
-  ground: Ground[],
-  notebooks: Notebook[],// 
+  ground: Ground[];
+  notebooks: Notebook[];
+  topic: string[];
 }
 
-// --- Notebook Data Type ---
 interface Notebook {
   id: string;
   userid: string;
@@ -45,43 +30,16 @@ interface Notebook {
   description: string | null;
 }
 
-export default function Dashboardui({ ground, notebooks }: DashboarduiProps) {
-
+export default function Dashboardui({ ground, notebooks, topic }: DashboarduiProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { name, fetchUser, logoutUser, email, id, avatar } = useUserState();
   const [isgroundopen, setisgroundopen] = useState<boolean>(false);
 
-
-  // --- Sample States for Layout Demonstration ---
-
-  // Sample Notebooks State (Clear array to test empty create state)
-
-
-  const [hasTakenRevision, setHasTakenRevision] = useState<boolean>(ground.length > 0 ? true : false);
-
-
-  // Expanded to 77 nodes (11 columns x 7 rows) to fill horizontal space perfectly
-  const contributionGrid = Array.from({ length: 77 }, (_, i) => ({
-    day: i,
-    hasActivity: i % 3 === 0 || i % 7 === 0 || i % 11 === 0,
-  }));
-
   // Shared Neo-Brutalist transparent box style
   const brutalBoxStyle = "bg-transparent border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all duration-200";
 
-  // Helper colors for notebook urgency indicators
-  const getUrgencyStyles = (level: "High" | "Medium" | "Low") => {
-    switch (level) {
-      case "High":
-        return "bg-red-500 text-white";
-      case "Medium":
-        return "bg-yellow-400 text-black";
-      case "Low":
-        return "bg-green-500 text-white";
-      default:
-        return "bg-black text-white";
-    }
-  };
+  // Derive unique tags/topics from your existing ground data dynamically
+
 
   return (
     <>
@@ -98,11 +56,11 @@ export default function Dashboardui({ ground, notebooks }: DashboarduiProps) {
             logout={logoutUser}
           />
 
-          {/* Main Container Layout - Expanded for full page scale */}
+          {/* Main Container Layout */}
           <main className="w-full mx-auto px-6 py-10 space-y-10 md:px-12 lg:px-16 max-w-[1800px]">
 
-            {/* ================= UPPER METRICS SECTION ================= */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* ================= UPPER METRICS SECTION (2 COLUMNS) ================= */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
               {/* Card 1: Notebook Highlights Section */}
               <div className={`${brutalBoxStyle} p-8 flex flex-col justify-between min-h-[300px]`}>
@@ -112,18 +70,19 @@ export default function Dashboardui({ ground, notebooks }: DashboarduiProps) {
                   </h3>
                 </div>
 
-                <div className="flex-1 flex flex-col justify-center w-full mt-4">
+                <div className="flex-1 flex flex-col justify-start w-full mt-4">
                   {notebooks.length === 0 ? (
                     /* Empty Notebook State */
-                    <div className="text-center space-y-3 py-4">
-                      <p className="text-xs font-bold text-black/60 italic">[ No active logs found ]</p>
-                      <button className="px-4 py-2 text-xs font-black uppercase tracking-wider text-white bg-black hover:bg-neutral-800 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] transition-all">
-                        Create Notebook
-                      </button>
+                    <div className="text-center space-y-3 py-4 my-auto">
+                      <p className="text-xs font-bold text-black/60 italic">No note is created yet</p>
+                      <Link href={'/notebook'}>
+                        <button className="px-4 py-2 text-xs font-black uppercase tracking-wider text-white bg-black hover:bg-neutral-800 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] transition-all">
+                          Create Notebook
+                        </button>
+                      </Link>
                     </div>
                   ) : (
-                    /* Listed Notebook Stack matching the Session Card layout look */
-                    <div className="space-y-3 max-h-[180px] overflow-y-auto pr-1">
+                    <div className="space-y-3 h-[180px] min-h-[180px] max-h-[180px] overflow-y-auto pr-1">
                       {notebooks.map((notebook) => (
                         <div
                           key={notebook.id}
@@ -132,80 +91,52 @@ export default function Dashboardui({ ground, notebooks }: DashboarduiProps) {
                           <span className="font-bold text-sm truncate tracking-tight">
                             {notebook.title}
                           </span>
-                          <Link href={"/sample"}><LinkIcon size={20} /></Link>
+                          <Link href={`/notebook?shownotemodal=true&noteq=${encodeURIComponent(
+                            JSON.stringify(notebook)
+                          )}`}>
+                            <LinkIcon size={20} />
+                          </Link>
                         </div>
                       ))}
                     </div>
-                    // on link href have to add ntebook page note link dynamically
                   )}
                 </div>
 
                 <p className="text-[10px] font-bold text-black/50 mt-2">
-                  System Total: {notebooks.length} Active Records
+                  Total: {notebooks.length} Notes
                 </p>
               </div>
 
-              {/* Card 2: Learning Behavior */}
-              <div className={`${brutalBoxStyle} p-8 flex flex-col min-h-[300px]`}>
-                <h3 className="text-base font-black tracking-wider uppercase mb-4 border-b-2 border-black pb-1 self-start">
-                  Learning Behavior
-                </h3>
-                <div className="flex-1 flex flex-col items-center justify-center text-center">
-                  {!hasTakenRevision ? (
-                    <div className="space-y-3">
-                      <p className="text-sm font-bold text-black/60 italic">
-                        [ Waiting for your first revision ground ]
-                      </p>
-                      <p className="text-xs text-black/50 max-w-xs leading-relaxed">
-                        Complete at least one core execution to map custom baseline capabilities.
-                      </p>
+              {/* Card 2: Topics Revised Section */}
+              <div className={`${brutalBoxStyle} p-8 flex flex-col justify-between min-h-[300px]`}>
+                <div className="w-full">
+                  <h3 className="text-base font-black tracking-wider uppercase border-b-2 border-black pb-1 self-start inline-block">
+                    Topics Revised
+                  </h3>
+                </div>
+
+                <div className="flex-1 flex flex-col justify-start w-full mt-4">
+                  {topic.length === 0 ? (
+                    <div className="text-center py-4 my-auto">
+                      <p className="text-xs font-bold text-black/60 italic">No topics recorded yet. Please create session.</p>
                     </div>
                   ) : (
-                    <div className="space-y-3 w-full text-left">
-                      <span className="text-xs font-black text-white bg-black px-2 py-1 uppercase tracking-wider">
-                        SYSTEM: OPTIMAL
-                      </span>
-                      <p className="text-sm font-bold leading-relaxed border-l-4 border-black pl-3 mt-2">
-                        Visual structures mapped. Current recursive interval retention is trending +42%.
-                      </p>
+                    <div className="flex flex-wrap content-start items-start justify-start gap-3 h-[180px] min-h-[180px] max-h-[180px] overflow-y-auto pr-1 py-1">
+                      {topic.map((topic, index) => (
+                        <div 
+                          key={index} 
+                          className="px-4 py-2 bg-black text-white text-xs font-black uppercase tracking-widest border-2 border-black shadow-[2px_2px_0px_0px_rgba(255,255,255,0.4)]"
+                        >
+                          {topic}
+                        </div>
+                      ))}
                     </div>
                   )}
                 </div>
-              </div>
 
-              {/* Card 3: GitHub-Style Grid Spread */}
-              <div className={`${brutalBoxStyle} p-8 flex flex-col justify-between min-h-[300px]`}>
-                <div>
-                  <h3 className="text-base font-black tracking-wider uppercase border-b-2 border-black pb-1 self-start inline-block">
-                    Learning Activity
-                  </h3>
-                  <p className="text-xs text-black/60 mt-2 font-bold">Metrics: Daily execution matrix</p>
-                </div>
-
-                {/* Expanded Grid Frame to fill width */}
-                <div className="w-full overflow-x-auto py-2 my-auto">
-                  <div className="grid grid-flow-col grid-rows-7 gap-2 min-w-full justify-between p-2 border-2 border-black bg-white/40">
-                    {contributionGrid.map((node) => (
-                      <div
-                        key={node.day}
-                        className={`w-4 h-4 border border-black/30 transition-all ${node.hasActivity
-                          ? "bg-black shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]"
-                          : "bg-transparent hover:bg-black/10"
-                          }`}
-                        title={node.hasActivity ? "Session Logged" : "Void"}
-                      />
-                    ))}
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between text-xs font-bold px-1">
-                  <span>[ Less ]</span>
-                  <div className="flex gap-1.5 items-center">
-                    <div className="w-3 h-3 border border-black bg-transparent" />
-                    <div className="w-3 h-3 border border-black bg-black" />
-                  </div>
-                  <span>[ More ]</span>
-                </div>
+                <p className="text-[10px] font-bold text-black/50 mt-2">
+                  Total topics: {topic.length} 
+                </p>
               </div>
 
             </div>
@@ -242,43 +173,42 @@ export default function Dashboardui({ ground, notebooks }: DashboarduiProps) {
                     </button>
                   </div>
                 ) : (
-                  /* Big blocks mapping full page row capacity */
                   <div className="flex flex-col space-y-6">
-                    {/* The main grid mapping your grounds */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 align-top auto-rows-start">
                       {ground.map((s) => (
-                        <div
-                          key={s.id}
-                          className="p-6 bg-white/40 border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] transition-all duration-150 flex flex-col justify-between space-y-4 min-h-[140px]"
-                        >
-                          <h4 className="font-black text-base tracking-tight leading-snug">
-                            {s.name}
-                          </h4>
-                          <div className="flex">
-                            <span className="text-[10px] font-black tracking-widest uppercase bg-black text-white px-2.5 py-1">
-                              {s.stack}
-                            </span>
+                        <Link href={`/ground/${s.id}`} key={s.id}>
+                          <div className="p-6 bg-white/40 border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] transition-all duration-150 flex flex-col justify-between space-y-4 min-h-[140px]">
+                            <h4 className="font-black text-base tracking-tight leading-snug">
+                              {s.name}
+                            </h4>
+                            <div className="flex">
+                              <span className="text-[10px] font-black tracking-widest uppercase bg-black text-white px-2.5 py-1">
+                                {s.stack}
+                              </span>
+                            </div>
                           </div>
-                        </div>
+                        </Link>
                       ))}
                     </div>
 
                     {/* View More button row aligned to the right */}
                     <div className="flex justify-end pt-2">
-                      <Link href={'/ground'}><button className="flex items-center cursor-pointer gap-2 bg-black text-white border-2 border-black font-mono text-xs font-black uppercase px-4 py-2.5 shadow-[3px_3px_0px_0px_rgba(0,0,0,0.3)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.3)] transition-all">
-                        <span>View More</span>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={3}
-                          stroke="currentColor"
-                          className="w-4 h-4"
-                          color="#ffffff"
-                        >
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                        </svg>
-                      </button></Link>
+                      <Link href={'/ground'}>
+                        <button className="flex items-center cursor-pointer gap-2 bg-black text-white border-2 border-black font-mono text-xs font-black uppercase px-4 py-2.5 shadow-[3px_3px_0px_0px_rgba(0,0,0,0.3)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.3)] transition-all">
+                          <span>View More</span>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={3}
+                            stroke="currentColor"
+                            className="w-4 h-4"
+                            color="#ffffff"
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                          </svg>
+                        </button>
+                      </Link>
                     </div>
                   </div>
                 )}
@@ -289,22 +219,21 @@ export default function Dashboardui({ ground, notebooks }: DashboarduiProps) {
           </main>
         </div>
       ) : (
+        /* Empty Dashboard View Setup */
         <div className="flex flex-col items-center justify-center py-20 px-6 border-4 border-black bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] font-mono text-black">
           <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tighter text-center mb-6">
-            No ground  is created yet.
+            No ground is created yet.
           </h1>
-
           <p className="text-sm font-bold uppercase tracking-tight text-gray-600 mb-10 text-center">
             Initialize your first workspace and learning to begin.
           </p>
           <button
             onClick={() => setisgroundopen(true)}
-            className="bg-white text-black cursor-pointer text-lg font-black uppercase tracking-[0.2em] px-10 py-5 border-4 border-black hover:translate-x-[6px] hover:translate-y-[6px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]  hover:text-black transition-all duration-100 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] "
+            className="bg-white text-black cursor-pointer text-lg font-black uppercase tracking-[0.2em] px-10 py-5 border-4 border-black hover:translate-x-[6px] hover:translate-y-[6px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:text-black transition-all duration-100 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]"
           >
             Create New
           </button>
         </div>
-        //for the upper buttton there will be either route or modal
       )}
     </>
   );

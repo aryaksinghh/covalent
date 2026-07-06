@@ -19,7 +19,22 @@ export default async function Dashboard(){
   const notebook = await prisma.notebook.findMany({
     where:{userid:user.id},
   })
+  const sessions = await prisma.sessions.findMany({
+    where:{userid:user.id},
+    select:{
+      topics: true
+    }
+  })
+  const topics:string[] = [];
+
+  sessions.forEach((t)=>{
+    t.topics.forEach((tt)=>{
+      topics.push(tt)
+    })
+  })
+ 
+  
   return(
-    <Dashboardui ground={grounds} notebooks={notebook}/>
+    <Dashboardui ground={grounds} notebooks={notebook} topic={topics}/>
   )
 }

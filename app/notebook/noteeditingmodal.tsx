@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Quill from 'quill';
 import "quill/dist/quill.core.css";
 import dynamic from "next/dynamic";
 
@@ -12,16 +11,15 @@ const ReactQuill = dynamic(
 
 interface Note {
   id: string;
-  title: string;
-  preview: string;
-  description: string;
-  createdAt: string;
+  title: string | null;
+  description: string | null;
+  createdAt: Date;
 }
 interface noteprops {
-  onClose: () => void;
-  note: Note
+  onClose: (type: "created" | "edited" | "close") => void;
+  note: Note | null
 }
-interface Date {
+interface date {
   day: string,
   date: number,
   month: string,
@@ -32,8 +30,10 @@ export default function NoteModal({ onClose, note }: noteprops) {
 
   const [value, setValue] = useState(note ? note.description : "");
   const [title, settitle] = useState(note ? note.title : "")
-  const [date, setdate] = useState<Date>({ day: "", date: 0, month: "", year: 0 })
+  const [date, setdate] = useState<date>({ day: "", date: 0, month: "", year: 0 })
   const [loading, setloading] = useState<boolean>(false)
+  const [notemodifiedtype, setnotemodifiedtype] = useState<"edited" | "created">()
+
   useEffect(() => {
     if (note) {
       const createdAt = new Date(note?.createdAt ?? "");
@@ -56,7 +56,6 @@ export default function NoteModal({ onClose, note }: noteprops) {
 
   const handlesavenote = async () => {
     setloading(true)
-    console.log("val", value)
     if (note && (note.title != title || note.description != value)) {
       try {
         const response = await fetch(
@@ -69,12 +68,12 @@ export default function NoteModal({ onClose, note }: noteprops) {
             body: JSON.stringify({
               id: note.id,
               title,
-              description:value,
+              description: value,
             }),
           }
         );
         setloading(false);
-        onClose()
+        onClose("edited")
 
         if (!response.ok) {
           const error = await response.json();
@@ -83,12 +82,11 @@ export default function NoteModal({ onClose, note }: noteprops) {
 
         const data = await response.json();
 
-        console.log("Successfully updated");
       } catch (error) {
         console.error(error);
       }
     }
-    if(!note && (title!="" && value!="")){
+    if (!note && (title != "" && value != "")) {
       try {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_HOST}/api/notebook_insert_db?type=insert`,
@@ -99,19 +97,18 @@ export default function NoteModal({ onClose, note }: noteprops) {
             },
             body: JSON.stringify({
               title,
-              description:value,
+              description: value,
             }),
           }
         );
         setloading(false);
-        onClose()
+        onClose("created")
 
         if (!(response.status == 201)) {
           const error = await response.json();
           throw new Error(error.message || "Failed to update notebook");
         }
 
-        console.log("Successfully created");
       } catch (error) {
         console.error(error);
       }
@@ -129,7 +126,7 @@ export default function NoteModal({ onClose, note }: noteprops) {
             {date.day}, {date.date} {date.month} {date.year}
           </div>
           <button
-            onClick={onClose}
+            onClick={() => onClose("close")}
             aria-label="Close modal"
             className="flex items-center cursor-pointer justify-center w-8 h-8 bg-white border-2 border-black font-bold text-lg hover:bg-red-500  hover:text-black transition-colors duration-150"
           >
@@ -141,7 +138,7 @@ export default function NoteModal({ onClose, note }: noteprops) {
         <div className="px-6 pt-2 pb-4 border-b-2 border-black">
           <input
             type="text"
-            value={title}
+            value={title || ""}
             onChange={(e) => settitle(e.target.value)}
             placeholder="enter note title..."
             className="w-full font-bold text-2xl sm:text-3xl tracking-tight text-black placeholder:text-gray-400 focus:outline-none bg-transparent"
@@ -152,7 +149,7 @@ export default function NoteModal({ onClose, note }: noteprops) {
         <div id='editor' className=" p-6 container  flex-1">
           <ReactQuill
             theme="snow"
-            value={value}
+            value={value || ""}
             onChange={setValue}
             style={{ height: "100px" }}
           />
@@ -161,10 +158,11 @@ export default function NoteModal({ onClose, note }: noteprops) {
         {/* Footer Area */}
         <div className="flex items-center justify-end px-6 py-4 border-t-2 border-black bg-white">
           <button
+            disabled={(note?.description == value && note?.title == title)}
             onClick={handlesavenote}
-            className="cursor-pointer border-2 border-black bg-black text-white px-5 py-2 text-xs font-mono font-bold uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,0.5)] hover:bg-white hover:text-black transition-all"
+            className="cursor-pointer border-2 border-black disabled:bg-gray-700 disabled:text-white disabled:cursor-not-allowed bg-black text-white px-5 py-2 text-xs font-mono font-bold uppercase shadow-[2px_2px_0px_0px_rgba(0,0,0,0.5)] hover:bg-white hover:text-black transition-all"
           >
-            {loading? "Saving...": "Save note"}
+            {loading ? "Saving..." : "Save note"}
           </button>
         </div>
 

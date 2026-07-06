@@ -1,13 +1,14 @@
 "use client"
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { X, Layers, HelpCircle } from 'lucide-react'; // Added clear indicator icons for inputs
+import { X, Layers, HelpCircle } from 'lucide-react';
+import toast, { Toaster } from "react-hot-toast";
 
 interface CreateSessionModalProps {
     isOpen: boolean;
     onClose: () => void;
     currentTechStack: string;
-    groundid: string // Dynamic tech stack passed from the active ground
+    groundid: string 
 }
 
 export default function CreateSessionModal({
@@ -17,8 +18,8 @@ export default function CreateSessionModal({
     groundid
 }: CreateSessionModalProps) {
     const [sessionName, setSessionName] = useState('');
-    const [conceptSlides, setConceptSlides] = useState('10');
-    const [revisionType, setRevisionType] = useState('random'); // 'random' or 'particular'
+    const [conceptSlides, setConceptSlides] = useState('5');
+    const [revisionType, setRevisionType] = useState('random'); 
     const [particularTopic, setParticularTopic] = useState('');
     const [iscreating, setiscreating] = useState<boolean>(false);
 
@@ -45,23 +46,33 @@ export default function CreateSessionModal({
                 })
             })
             const res = await insertSession.json();
-            if (res.status == 201) {
+            if (insertSession.status == 201) {
+                toast.success("session created")
                 setiscreating(false);
                  window.location.href = `${process.env.NEXT_PUBLIC_HOST}/ground/${groundid}/session/${res.message.id}/learningengine?type=${revisionType}&quesno=${conceptSlides}`
+            } else{
+                setiscreating(false);
+                toast.error("something went wrong")
+                console.error("error occured while creating a session", res.error )
+                throw new Error("error creating session")
             }
         } catch (error) {
-            console.error("error occuring while inserting session", error)
+            console.error(error)
         } 
     };
 
-    return (
-        // Backdrop: Fixed, blurred background keeping the brutalist window centered
+    return (<>
+     <Toaster position="top-right" toastOptions={{
+                // Define default options
+                className: '',
+                duration: 5000,
+                removeDelay: 1000,
+                style: {
+                    background: '#000000',
+                    color: '#fff',
+                }}} />
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-md bg-black/40 animate-in fade-in duration-150">
-
-            {/* Boxy Modal Box */}
             <div className="bg-white border-4 border-black p-6 w-full max-w-2xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative font-mono text-black animate-in zoom-in-95 duration-150">
-
-                {/* Close Button Cross */}
                 <button
                     onClick={onClose}
                     className="absolute cursor-pointer top-4 right-4 p-1 bg-white border-2 border-black hover:bg-black hover:text-white transition-colors shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]"
@@ -70,18 +81,14 @@ export default function CreateSessionModal({
                     <X className="w-4 h-4 stroke-[2.5]" />
                 </button>
 
-                {/* Modal Header */}
+                
                 <div className="border-b-2 border-black pb-3 mb-6">
                     <h2 className="text-xl font-black uppercase tracking-tight">INITIALIZE REVISION</h2>
                 </div>
 
-                {/* Outer Split Layout: Form & Feynman Frame */}
+                
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
-
-                    {/* Left Column: Form Inputs */}
                     <form onSubmit={handleSubmit} className="md:col-span-7 space-y-4">
-
-                        {/* Tech Stack Info Block */}
                         <div className="border-2 border-black bg-[#f5f5f5] p-3">
                             <span className="block text-[10px] font-black text-gray-500 uppercase tracking-wider mb-0.5">
                                 Tech Stack
@@ -91,13 +98,11 @@ export default function CreateSessionModal({
                             </span>
                         </div>
 
-                        {/* Input 1: Concept Slides Select Options */}
                         <div className="space-y-1.5">
                             <label className="block text-xs font-black uppercase tracking-wide">
                                 Concept Slides:
                             </label>
                             <div className="relative flex items-center">
-                                {/* Visual Entry Icon */}
                                 <div className="absolute left-3 pointer-events-none text-black z-10">
                                     <Layers className="w-4 h-4 stroke-[2.5]" />
                                 </div>
@@ -111,20 +116,16 @@ export default function CreateSessionModal({
                                     <option value="15">15 SLIDES (DEEP FOCUS)</option>
                                     <option value="20">20 SLIDES (COMPREHENSIVE)</option>
                                 </select>
-                                {/* Custom boxy drop arrow indicator */}
                                 <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none border-l-2 border-black bg-white px-2.5 font-black text-xs">
                                     ↓
                                 </div>
                             </div>
                         </div>
-
-                        {/* Input 2: Type Select Options */}
                         <div className="space-y-1.5">
                             <label className="block text-xs font-black uppercase tracking-wide">
                                 Revision Type:
                             </label>
                             <div className="relative flex items-center">
-                                {/* Visual Entry Icon */}
                                 <div className="absolute left-3 pointer-events-none text-black z-10">
                                     <HelpCircle className="w-4 h-4 stroke-[2.5]" />
                                 </div>
@@ -133,17 +134,15 @@ export default function CreateSessionModal({
                                     onChange={(e) => setRevisionType(e.target.value)}
                                     className="w-full bg-white border-2 border-black p-2.5 pl-10 text-sm font-bold tracking-wide rounded-none appearance-none focus:outline-none focus:bg-[#f5f5f5] cursor-pointer"
                                 >
-                                    <option value="random">RANDOM REVISION ENGINE</option>
-                                    <option value="custom">REVISE PARTICULAR CONCEPT</option>
+                                    <option className='hover:cursor-pointer' value="random">RANDOM REVISION ENGINE</option>
+                                    <option className='disabled:cursor-not-allowed' disabled={true} value="custom">REVISE PARTICULAR CONCEPT (SOON)</option>
                                 </select>
-                                {/* Custom boxy drop arrow indicator */}
                                 <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none border-l-2 border-black bg-white px-2.5 font-black text-xs">
                                     ↓
                                 </div>
                             </div>
                         </div>
 
-                        {/* Conditional Input: Particular Topic Text Field */}
                         {revisionType === 'particular' && (
                             <div className="space-y-1.5 animate-in fade-in duration-100">
                                 <label className="block text-xs font-black uppercase tracking-wide">
@@ -160,7 +159,6 @@ export default function CreateSessionModal({
                             </div>
                         )}
 
-                        {/* Input 3: Text input for Name of Session */}
                         <div className="space-y-1.5">
                             <label className="block text-xs font-black uppercase tracking-wide">
                                 Session Name:
@@ -175,7 +173,6 @@ export default function CreateSessionModal({
                             />
                         </div>
 
-                        {/* Action Trigger Button */}
                         <div className="pt-2">
                             <button
                                 type="submit"
@@ -186,7 +183,6 @@ export default function CreateSessionModal({
                         </div>
                     </form>
 
-                    {/* Right Column: Feynman Image Presentation Frame */}
                     <div className="md:col-span-5 flex flex-col items-center justify-center h-full">
                         <div className="border-2 border-black bg-white p-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] w-full max-w-[200px] aspect-square relative">
                             <div className="w-full h-full relative bg-[#e5e5e5] border border-dashed border-gray-400 flex items-center justify-center overflow-hidden">
@@ -214,5 +210,5 @@ export default function CreateSessionModal({
 
             </div>
         </div>
-    );
+    </>);
 }

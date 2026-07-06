@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 interface FirstPrincipleContent {
   title: string;
@@ -53,7 +54,8 @@ type StudyNode = ConceptNode | MCQNode;
 
 interface paramstypes {
   Nodeworkflow: StudyNode[];
-  sid: string
+  sid: string;
+  groundid: string
 }
 interface evalfeedback {
   score: string,
@@ -66,9 +68,9 @@ interface sessionfeedback {
 
 
 
-export default function LearningEngineUI({ Nodeworkflow, sid }: paramstypes) {
+export default function LearningEngineUI({ Nodeworkflow, sid, groundid }: paramstypes) {
 
-
+  const router = useRouter();
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [historyIndex, setHistoryIndex] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -444,6 +446,7 @@ export default function LearningEngineUI({ Nodeworkflow, sid }: paramstypes) {
                   setCurrentIndex(0);
                   setHistoryIndex(0);
                   resetMCQ();
+                  router.push(`/ground/${groundid}/session/${sid}`);
                 }}
                 className="w-full sm:w-auto bg-black text-white cursor-pointer font-black py-4 px-8 uppercase tracking-widest text-sm border-2 border-black shadow-[6px_6px_0px_0px_rgba(255,255,255,1)] hover:bg-neutral-900 hover:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] transition-all"
               >

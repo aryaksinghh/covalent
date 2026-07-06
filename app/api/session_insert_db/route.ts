@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
       });
   
       return NextResponse.json(
-        { message: session, status:201 },
+        { message: session }, {status:201}
       );
     } catch (error) {
       console.error(error);
