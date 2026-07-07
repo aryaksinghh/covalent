@@ -15,7 +15,6 @@ interface SidebarProps {
 export default function Sidebar({ isOpen, onClose, Avatar, logout }: SidebarProps) {
   return (
     <>
-      {/* Background overlay (tap to close) */}
       <div 
         className={`fixed inset-0 bg-black/20  backdrop-blur-sm z-40 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
         onClick={onClose}

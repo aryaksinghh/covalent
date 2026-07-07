@@ -65,7 +65,6 @@ export default function Profile({ profileDetails }: propsUser) {
     return (
         <div className="bg-[#f0f0f0] w-full min-h-screen font-source text-black antialiased">
             <Toaster position="top-right" toastOptions={{
-                // Define default options
                 className: '',
                 duration: 5000,
                 removeDelay: 1000,
@@ -82,7 +81,6 @@ export default function Profile({ profileDetails }: propsUser) {
             <main className="max-w-4xl mx-auto px-6 py-12">
                 <div className="bg-white border-4 border-black p-8 md:p-12 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
 
-                    {/* Header: Avatar + Intro */}
                     <div className="flex flex-col md:flex-row items-center gap-8 border-b-4 border-dashed border-black pb-8 mb-8">
                         <Image
                             src={avatar || "https://api.dicebear.com/7.x/bottts/svg?seed=covalent"}
@@ -96,7 +94,6 @@ export default function Profile({ profileDetails }: propsUser) {
                         </div>
                     </div>
 
-                    {/* Unified Grid: All details now here */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                         {[
                             { label: "Full Name", value: profileDetails.name, color: "bg-yellow-200" },
@@ -122,7 +119,6 @@ export default function Profile({ profileDetails }: propsUser) {
                 </div>
             </main>
 
-            {/* Modal remains the same structure but updated with email locked */}
             {isEditModalOpen && (
                 <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
                     <div className="bg-white border-4 border-black w-full max-w-lg p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">

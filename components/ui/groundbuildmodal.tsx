@@ -5,13 +5,67 @@ import { useUserState } from '@/states/userState';
 import { useRouter } from 'next/navigation';
 import toast, { Toaster } from "react-hot-toast";
 
-// Sub-category mapping data
 const subCategoryData: Record<string, string[]> = {
-  programming: ['JavaScript', 'TypeScript', 'Python', 'Java'],
-  frontend: ['HTML', 'CSS', 'React', 'Next.js'],
-  backend: ['Node.js', 'Express.js', 'NextJS'],
-  database: ['PostgreSQL', 'MySQL', 'MongoDB'],
-  computerscience: ['DSA', 'DBMS', 'OS', 'CN'],
+  programming: [
+    'JavaScript',
+    'TypeScript',
+    'Python',
+    'Java',
+    'C++',
+    "C",
+    'Go',
+    'Rust'
+  ],
+
+  frontend: [
+    'HTML',
+    'CSS',
+    'JavaScript',
+    'TypeScript',
+    'React',
+    'Next.js',
+    'Tailwind CSS',
+    'Redux',
+    'Zustand',
+    'Shadcn UI'
+  ],
+
+  backend: [
+    'Node.js',
+    'Express.js',
+    'Next.js',
+    'NestJS',
+    'Fastify',
+    'REST API',
+    'GraphQL',
+    'tRPC',
+    'WebSockets'
+  ],
+
+  database: [
+    'PostgreSQL',
+    'MySQL',
+    'MongoDB',
+    'Redis',
+    'SQLite',
+    'Prisma ORM',
+    'Drizzle ORM',
+    'Supabase',
+    'Firebase'
+  ],
+
+  computerscience: [
+    'DSA',
+    'DBMS',
+    'Operating Systems',
+    'Computer Networks',
+    'OOP',
+    'System Design',
+    'Low-Level Design',
+    'High-Level Design',
+    'Concurrency',
+    'Networking'
+  ],
 };
 
 interface CreateGroundModalProps {
@@ -29,7 +83,6 @@ export default function CreateGroundModal({ isOpen, onClose }: CreateGroundModal
   const [iscreating, setiscreating] = useState<boolean>(false);
   fetchUser();
 
-  // Reset sub-category whenever main category changes
   useEffect(() => {
     setSubCategory('');
   }, [category]);
@@ -64,7 +117,6 @@ export default function CreateGroundModal({ isOpen, onClose }: CreateGroundModal
 
   return (<>
     <Toaster position="top-right" toastOptions={{
-      // Define default options
       className: '',
       duration: 5000,
       removeDelay: 1000,
@@ -74,10 +126,8 @@ export default function CreateGroundModal({ isOpen, onClose }: CreateGroundModal
       }
     }} />
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 font-mono">
-      {/* Modal Box */}
       <div className="relative w-full max-w-md bg-[#f3f3f3] border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] p-6 transition-all">
 
-        {/* Header */}
         <div className="flex justify-between items-center mb-6 pb-2 border-b-2 border-black">
           <h2 className="text-xl font-black uppercase tracking-wider text-black">
             CREATE GROUND
@@ -90,10 +140,8 @@ export default function CreateGroundModal({ isOpen, onClose }: CreateGroundModal
           </button>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
 
-          {/* Ground Name Input */}
           <div className="flex flex-col gap-1.5">
             <label className="text-xs font-black uppercase text-black tracking-wide">
               Ground Name
@@ -107,8 +155,6 @@ export default function CreateGroundModal({ isOpen, onClose }: CreateGroundModal
               className="w-full bg-white border-2 border-black p-2.5 text-sm text-black placeholder-zinc-500 outline-none focus:bg-zinc-50 font-medium transition-colors"
             />
           </div>
-
-          {/* Main Category Select */}
           <div className="flex flex-col gap-1.5">
             <label className="text-xs font-black uppercase text-black tracking-wide">
               Category
@@ -129,7 +175,6 @@ export default function CreateGroundModal({ isOpen, onClose }: CreateGroundModal
             </select>
           </div>
 
-          {/* Conditional Sub-Category Select */}
           {category && subCategoryData[category] && (
             <div className="flex flex-col gap-1.5 animate-in fade-in slide-in-from-top-2 duration-200">
               <label className="text-xs font-black uppercase text-black tracking-wide flex items-center gap-1">
@@ -152,7 +197,6 @@ export default function CreateGroundModal({ isOpen, onClose }: CreateGroundModal
             </div>
           )}
 
-          {/* Experience Select */}
           <div className="flex flex-col gap-1.5">
             <label className="text-xs font-black uppercase text-black tracking-wide">
               Experience Level
@@ -171,7 +215,6 @@ export default function CreateGroundModal({ isOpen, onClose }: CreateGroundModal
             </select>
           </div>
 
-          {/* Action Buttons */}
           <div className="flex justify-end gap-3 pt-4">
             <button
               type="button"

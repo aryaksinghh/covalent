@@ -7,7 +7,6 @@ import { useUserState } from '@/states/userState';
 import CreateGroundModal from '@/components/ui/groundbuildmodal';
 import Link from 'next/link';
 
-// Define the Ground Interface
 interface GroundInfo {
   id: string;
   name: string;
@@ -16,7 +15,7 @@ interface GroundInfo {
   userid: string;
   category: string;
   stack: string;
-  createdAt: string;
+  createdAt: Date;
 }
 
 interface GroundpageUiProps {
@@ -44,7 +43,6 @@ export default function GroundpageUi({ grounds }: GroundpageUiProps) {
         
         <section className="bg-white border-2 border-black p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
           
-          {/* Header Row */}
           <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 border-b border-black pb-4 mb-6">
             <div>
               <h1 className="text-xl font-black uppercase tracking-tight">Grounds</h1>
@@ -55,18 +53,15 @@ export default function GroundpageUi({ grounds }: GroundpageUiProps) {
             </button>
           </div>
 
-          {/* Grounds Mapping Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {grounds.map((ground) => (
               <div 
                 key={ground.id} 
                 className="bg-white border-2 border-black p-5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col justify-between min-h-[140px] group relative"
               >
-                {/* Title & Action Button Row */}
                 <div className="flex justify-between items-start gap-4">
                   <h3 className="font-bold text-sm leading-snug">{ground.name}</h3>
                   
-                  {/* Click to open button */}
                   <Link href={`/ground/${ground.id}`}><button 
                     className="border-2 cursor-pointer border-black p-1.5 bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-black hover:text-white active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all shrink-0"
                     title="Open Ground"
@@ -75,7 +70,6 @@ export default function GroundpageUi({ grounds }: GroundpageUiProps) {
                   </button></Link>
                 </div>
 
-                {/* Category Badge */}
                 <div className="mt-4">
                   <span className="inline-block bg-black text-white text-[9px] font-black tracking-wide px-2 py-1 uppercase">
                     {ground.stack}

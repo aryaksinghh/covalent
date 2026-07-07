@@ -21,6 +21,7 @@ interface Question {
   questionText: string;
   options: optionobj[];
   answer: string
+  code:{language: string|null, codeString: string|null}
 }
 
 export default async function Braintesting({ params }: paramstype) {
@@ -28,7 +29,7 @@ export default async function Braintesting({ params }: paramstype) {
   const { data: { user } } = await supabase.auth.getUser();
   const { id } = await params;
   const redis = Redis.fromEnv()
-  let qb: Question;
+  let qb: Question[];
   if (!id || id === "undefined" || id === "null" || id === "") {
     return notFound()
   }
@@ -48,7 +49,7 @@ export default async function Braintesting({ params }: paramstype) {
     return <Alreadytested />
   }
 
-  const redisFetch: Question | null = await redis.get(`ques:${id}`);
+  const redisFetch: Question[] | null = await redis.get(`ques:${id}`);
   if (!redisFetch) {
 
     const chatcomp = await groq.chat.completions.create({
@@ -64,6 +65,7 @@ export default async function Braintesting({ params }: paramstype) {
           
           Rules:
           - Return a JSON array.
+          - If you include code section in question then provide in code key of object not as string in question
           - Do not include markdown.
           - Do not include explanations.
           - Do not include notes.
@@ -99,7 +101,8 @@ export default async function Braintesting({ params }: paramstype) {
                   "text": ""
                 }
               ],
-              "answer": "A"
+              "answer": "A",
+              "code": {"language": "string|null", "codeString":"string|null"}
             }
           ]
           
@@ -109,6 +112,7 @@ export default async function Braintesting({ params }: paramstype) {
           - option values must be A, B, C, D.
           - answer must contain only the correct option letter.
           - Exactly one option must be correct.
+          - should have a easy to understand code if reuired and not included in question string give in code key acordingly in schema i gave.
           `
         },
         {

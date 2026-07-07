@@ -1,11 +1,12 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import InfoBar from "@/components/ui/infobar";
 import Sidebar from "@/components/ui/sidebar";
 import { useUserState } from "@/states/userState";
 import Link from "next/link";
 import { LinkIcon } from 'lucide-react';
 import CreateGroundModal from "@/components/ui/groundbuildmodal";
+import ComingSoonModal from "@/components/ui/featuresinfo";
 
 interface Ground {
   id: string;
@@ -34,19 +35,16 @@ export default function Dashboardui({ ground, notebooks, topic }: DashboarduiPro
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { name, fetchUser, logoutUser, email, id, avatar } = useUserState();
   const [isgroundopen, setisgroundopen] = useState<boolean>(false);
+  const [isNoticeOpen, setisNoticeOpen] = useState<boolean>(true);
 
-  // Shared Neo-Brutalist transparent box style
   const brutalBoxStyle = "bg-transparent border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all duration-200";
-
-  // Derive unique tags/topics from your existing ground data dynamically
-
 
   return (
     <>
+      {isNoticeOpen && <ComingSoonModal isOpen={isNoticeOpen} onClose={() => { setisNoticeOpen(false); }} />}
       {isgroundopen && <CreateGroundModal isOpen={isgroundopen} onClose={() => setisgroundopen(false)} />}
       {ground.length > 0 ? (
         <div className="bg-[#f0f0f0] w-full overflow-x-hidden min-h-screen text-black font-mono antialiased">
-          {/* Navigation Layer */}
           <InfoBar onMenuClick={() => setIsSidebarOpen(true)} Name={name} FetchUser={fetchUser} />
 
           <Sidebar
@@ -56,95 +54,92 @@ export default function Dashboardui({ ground, notebooks, topic }: DashboarduiPro
             logout={logoutUser}
           />
 
-          {/* Main Container Layout */}
           <main className="w-full mx-auto px-6 py-10 space-y-10 md:px-12 lg:px-16 max-w-[1800px]">
 
-            {/* ================= UPPER METRICS SECTION (2 COLUMNS) ================= */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+           {/* upper metrics column*/}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
-              {/* Card 1: Notebook Highlights Section */}
-              <div className={`${brutalBoxStyle} p-8 flex flex-col justify-between min-h-[300px]`}>
-                <div className="w-full">
-                  <h3 className="text-base font-black tracking-wider uppercase border-b-2 border-black pb-1 self-start inline-block">
-                    Notebook Highlights
-                  </h3>
-                </div>
-
-                <div className="flex-1 flex flex-col justify-start w-full mt-4">
-                  {notebooks.length === 0 ? (
-                    /* Empty Notebook State */
-                    <div className="text-center space-y-3 py-4 my-auto">
-                      <p className="text-xs font-bold text-black/60 italic">No note is created yet</p>
-                      <Link href={'/notebook'}>
-                        <button className="px-4 py-2 text-xs font-black uppercase tracking-wider text-white bg-black hover:bg-neutral-800 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] transition-all">
-                          Create Notebook
-                        </button>
-                      </Link>
+                {/* Notebook Highlights Section*/}
+                  <div className={`${brutalBoxStyle} p-8 flex flex-col justify-between min-h-[300px]`}>
+                    <div className="w-full">
+                      <h3 className="text-base font-black tracking-wider uppercase border-b-2 border-black pb-1 self-start inline-block">
+                        Notebook Highlights
+                      </h3>
                     </div>
-                  ) : (
-                    <div className="space-y-3 h-[180px] min-h-[180px] max-h-[180px] overflow-y-auto pr-1">
-                      {notebooks.map((notebook) => (
-                        <div
-                          key={notebook.id}
-                          className="p-3 bg-white/50 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] flex items-center justify-between gap-4"
-                        >
-                          <span className="font-bold text-sm truncate tracking-tight">
-                            {notebook.title}
-                          </span>
-                          <Link href={`/notebook?shownotemodal=true&noteq=${encodeURIComponent(
-                            JSON.stringify(notebook)
-                          )}`}>
-                            <LinkIcon size={20} />
+
+                    <div className="flex-1 flex flex-col justify-start w-full mt-4">
+                      {notebooks.length === 0 ? (
+                        <div className="text-center space-y-3 py-4 my-auto">
+                          <p className="text-xs font-bold text-black/60 italic">No note is created yet</p>
+                          <Link href={'/notebook'}>
+                            <button className="px-4 py-2 text-xs font-black uppercase tracking-wider text-white bg-black hover:bg-neutral-800 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] transition-all">
+                              Create Notebook
+                            </button>
                           </Link>
                         </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                <p className="text-[10px] font-bold text-black/50 mt-2">
-                  Total: {notebooks.length} Notes
-                </p>
-              </div>
-
-              {/* Card 2: Topics Revised Section */}
-              <div className={`${brutalBoxStyle} p-8 flex flex-col justify-between min-h-[300px]`}>
-                <div className="w-full">
-                  <h3 className="text-base font-black tracking-wider uppercase border-b-2 border-black pb-1 self-start inline-block">
-                    Topics Revised
-                  </h3>
-                </div>
-
-                <div className="flex-1 flex flex-col justify-start w-full mt-4">
-                  {topic.length === 0 ? (
-                    <div className="text-center py-4 my-auto">
-                      <p className="text-xs font-bold text-black/60 italic">No topics recorded yet. Please create session.</p>
-                    </div>
-                  ) : (
-                    <div className="flex flex-wrap content-start items-start justify-start gap-3 h-[180px] min-h-[180px] max-h-[180px] overflow-y-auto pr-1 py-1">
-                      {topic.map((topic, index) => (
-                        <div 
-                          key={index} 
-                          className="px-4 py-2 bg-black text-white text-xs font-black uppercase tracking-widest border-2 border-black shadow-[2px_2px_0px_0px_rgba(255,255,255,0.4)]"
-                        >
-                          {topic}
+                      ) : (
+                        <div className="space-y-3 h-[180px] min-h-[180px] max-h-[180px] overflow-y-auto pr-1">
+                          {notebooks.map((notebook) => (
+                            <div
+                              key={notebook.id}
+                              className="p-3 bg-white/50 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] flex items-center justify-between gap-4"
+                            >
+                              <span className="font-bold text-sm truncate tracking-tight">
+                                {notebook.title}
+                              </span>
+                              <Link href={`/notebook?shownotemodal=true&noteq=${encodeURIComponent(
+                                JSON.stringify(notebook)
+                              )}`}>
+                                <LinkIcon size={20} />
+                              </Link>
+                            </div>
+                          ))}
                         </div>
-                      ))}
+                      )}
                     </div>
-                  )}
-                </div>
 
-                <p className="text-[10px] font-bold text-black/50 mt-2">
-                  Total topics: {topic.length} 
-                </p>
-              </div>
+                    <p className="text-[10px] font-bold text-black/50 mt-2">
+                      Total: {notebooks.length} Notes
+                    </p>
+                  </div>
+
+                 {/* topics revised*/}
+                  <div className={`${brutalBoxStyle} p-8 flex flex-col justify-between min-h-[300px]`}>
+                    <div className="w-full">
+                      <h3 className="text-base font-black tracking-wider uppercase border-b-2 border-black pb-1 self-start inline-block">
+                        Topics Revised
+                      </h3>
+                    </div>
+
+                    <div className="flex-1 flex flex-col justify-start w-full mt-4">
+                      {topic.length === 0 ? (
+                        <div className="text-center py-4 my-auto">
+                          <p className="text-xs font-bold text-black/60 italic">No topics recorded yet. Please create session.</p>
+                        </div>
+                      ) : (
+                        <div className="flex flex-wrap content-start items-start justify-start gap-3 h-[180px] min-h-[180px] max-h-[180px] overflow-y-auto pr-1 py-1">
+                          {topic.map((topic, index) => (
+                            <div
+                              key={index}
+                              className="px-4 py-2 bg-black text-white text-xs font-black uppercase tracking-widest border-2 border-black shadow-[2px_2px_0px_0px_rgba(255,255,255,0.4)]"
+                            >
+                              {topic}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    <p className="text-[10px] font-bold text-black/50 mt-2">
+                      Total topics: {topic.length}
+                    </p>
+                  </div>
 
             </div>
 
-            {/* ================= LOWER SESSIONS SECTION ================= */}
+            {/* grounds box */}
             <div className={`${brutalBoxStyle} p-8 min-h-[400px] flex flex-col justify-between`}>
 
-              {/* Section Header */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b-2 border-black pb-6 mb-6 gap-4">
                 <div>
                   <h2 className="text-2xl font-black uppercase tracking-tight">
@@ -159,7 +154,6 @@ export default function Dashboardui({ ground, notebooks, topic }: DashboarduiPro
                 )}
               </div>
 
-              {/* Core Content Grid Frame */}
               <div className="flex-1 flex flex-col justify-center">
                 {ground.length === 0 ? (
                   <div className="text-center space-y-6 py-12">
@@ -191,7 +185,6 @@ export default function Dashboardui({ ground, notebooks, topic }: DashboarduiPro
                       ))}
                     </div>
 
-                    {/* View More button row aligned to the right */}
                     <div className="flex justify-end pt-2">
                       <Link href={'/ground'}>
                         <button className="flex items-center cursor-pointer gap-2 bg-black text-white border-2 border-black font-mono text-xs font-black uppercase px-4 py-2.5 shadow-[3px_3px_0px_0px_rgba(0,0,0,0.3)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,0.3)] transition-all">
@@ -219,7 +212,6 @@ export default function Dashboardui({ ground, notebooks, topic }: DashboarduiPro
           </main>
         </div>
       ) : (
-        /* Empty Dashboard View Setup */
         <div className="flex flex-col items-center justify-center py-20 px-6 border-4 border-black bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] font-mono text-black">
           <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tighter text-center mb-6">
             No ground is created yet.

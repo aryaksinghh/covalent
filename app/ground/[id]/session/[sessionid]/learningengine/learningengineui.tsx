@@ -239,7 +239,7 @@ export default function LearningEngineUI({ Nodeworkflow, sid, groundid }: params
                   </span>
                   <h1 className="text-4xl font-black uppercase tracking-tight mt-3">
                     {currentNode.title}
-                    
+
                   </h1>
                 </div>
 
@@ -247,15 +247,14 @@ export default function LearningEngineUI({ Nodeworkflow, sid, groundid }: params
                   <h3 className="text-xs mt-3 uppercase font-extrabold text-black/60 tracking-wider">Solution:</h3>
                   <p className="text-lg leading-relaxed font-medium text-neutral-800">
                     {currentNode.solution}
-                    
+
                   </p>
                   <h1 className="font-bold">Code Example :</h1>
                   {(currentNode.code.codeString) && <SyntaxHighlighter language={currentNode.code.language || ""} style={a11yDark}>
-                      {currentNode.code.codeString}
-                    </SyntaxHighlighter>}
+                    {currentNode.code.codeString}
+                  </SyntaxHighlighter>}
                 </div>
 
-                {/* Self-Assessment Interaction */}
                 <div className="flex gap-4 pt-6">
                   <button
                     onClick={handleNext}
@@ -293,8 +292,8 @@ export default function LearningEngineUI({ Nodeworkflow, sid, groundid }: params
                   </h2>
                   <h1 className="font-bold mt-3 mb-3">Code:</h1>
                   {(currentNode.code.codeString) && <SyntaxHighlighter language={currentNode.code.language || ""} style={a11yDark}>
-                      {currentNode.code.codeString}
-                    </SyntaxHighlighter>}
+                    {currentNode.code.codeString}
+                  </SyntaxHighlighter>}
                 </div>
 
                 <div className="space-y-3 pt-2">
@@ -362,7 +361,6 @@ export default function LearningEngineUI({ Nodeworkflow, sid, groundid }: params
               </div>
             )}
 
-            {/* BOTTOM NAV ARROWS */}
             <div className="flex justify-between items-center pt-12 mt-12 border-t-2 border-black">
               <button
                 onClick={handlePrev}
@@ -390,7 +388,6 @@ export default function LearningEngineUI({ Nodeworkflow, sid, groundid }: params
         ) : (
           /* CONGRATULATIONS SCREEN */
           <div className="text-center space-y-6 py-8 animate-in zoom-in-95 duration-300 max-w-md mx-auto">
-            {/* Larger Square Brain Container with Grid Background Frame */}
             <div
               className="inline-block bg-white border-4 border-black p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]"
               style={{
@@ -401,21 +398,18 @@ export default function LearningEngineUI({ Nodeworkflow, sid, groundid }: params
               <Image
                 width={100}
                 height={100}
-                src="/brain1.png" // Replace with your actual png path
+                src="/brain1.png"
                 alt="Brain Optimization"
                 className="object-contain block mx-auto"
               />
             </div>
 
-            {/* Dynamic Appreciation Heading Section */}
             <div>
               <h1 className="text-4xl font-black uppercase tracking-tight mt-2">
-                {/* Replace this hardcoded string with your dynamic logic variable */}
                 {"Outstanding Performance!"}
               </h1>
             </div>
 
-            {/* Metrics Grid: Score & XP */}
             <div className="grid grid-cols-3 gap-4 max-w-md mx-auto">
 
               {/* MCQ Score Box */}
@@ -451,10 +445,6 @@ export default function LearningEngineUI({ Nodeworkflow, sid, groundid }: params
 
             </div>
 
-            {/* Bottom Feedback Line */}
-
-
-            {/* Action Button */}
             <div className="pt-4">
               <button
                 onClick={() => {
@@ -472,7 +462,7 @@ export default function LearningEngineUI({ Nodeworkflow, sid, groundid }: params
         )}
       </div>
 
-      {/* --- RECONSTRUCTED 3-STEP FIRST PRINCIPLE MODAL --- */}
+      {/* 3-STEP FIRST PRINCIPLE MODAL */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="bg-[#F0F0F0] border-4 border-black w-full max-w-2xl h-[85vh] relative shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex flex-col overflow-hidden">
@@ -501,7 +491,6 @@ export default function LearningEngineUI({ Nodeworkflow, sid, groundid }: params
                 </h3>
               </div>
 
-              {/* Close Button */}
               <button
                 onClick={handleCloseModal}
                 className="bg-white border-2 border-black w-4 h-4 p-3 flex items-center justify-center font-black hover:bg-black hover:text-white transition-colors cursor-pointer shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none"
@@ -510,13 +499,12 @@ export default function LearningEngineUI({ Nodeworkflow, sid, groundid }: params
               </button>
             </div>
 
-            {/* --- STRICTLY ISOLATED SCROLLABLE CONTENT --- */}
+            {/* ISOLATED SCROLLABLE CONTENT */}
             <div className="flex-1 overflow-y-auto px-6 space-y-6 mt-4 selection:bg-black selection:text-white min-h-0 pb-8">
 
               {/* Step 1: Deep First Principles Breakdown or Loading view */}
               {modalStep === 1 && (
                 isLoading ? (
-                  /* --- STRUCTURAL MONOCHROME LOADING SKELETON --- */
                   <div className="space-y-6 animate-pulse">
                     <div className="p-4 bg-white border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] h-32 flex items-center justify-center font-mono text-xs font-black uppercase tracking-widest text-neutral-500">
                       ⚡ LOADING...
@@ -528,7 +516,7 @@ export default function LearningEngineUI({ Nodeworkflow, sid, groundid }: params
                     </div>
                   </div>
                 ) : fptObj ? (
-                  /* --- TEXT FLOW ARCHITECTURE (HUMAN PSYCHOLOGY OPTIMIZED) --- */
+                  /* TEXT FLOW ARCHITECTURE */
                   <div className="space-y-6 animate-in fade-in duration-200">
 
                     {/* Context Framing Row */}
@@ -545,9 +533,6 @@ export default function LearningEngineUI({ Nodeworkflow, sid, groundid }: params
                       </div>
                     </div>
 
-
-
-                    {/* Structural Linear Flow: The Problem Pipeline */}
                     <div className="space-y-4">
                       <h4 className="text-sm font-black uppercase tracking-wider border-b-2 border-black pb-1 inline-block">
                         THE FOUNDATIONAL BREAKDOWN
@@ -571,7 +556,6 @@ export default function LearningEngineUI({ Nodeworkflow, sid, groundid }: params
                       </div>
                     </div>
 
-                    {/* The Core Truth/Insight Box (High contrast attention point) */}
                     <div className="p-5 bg-white border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] space-y-1.5">
                       <span className="text-[10px] font-black uppercase tracking-widest text-neutral-500 block">
                         ✨ core idea
@@ -581,7 +565,6 @@ export default function LearningEngineUI({ Nodeworkflow, sid, groundid }: params
                       </p>
                     </div>
 
-                    {/* Step-by-Step Mechanical Path */}
                     {fptObj.firstPrincipleExplanation?.stepByStepExplanation?.length > 0 && (
                       <div className="space-y-3 pt-2">
                         <h4 className="text-sm font-black uppercase tracking-wider border-b-2 border-black pb-1 inline-block">
@@ -600,20 +583,15 @@ export default function LearningEngineUI({ Nodeworkflow, sid, groundid }: params
                       </div>
                     )}
 
-                    {/* Code Blueprint Implementation View */}
                     {fptObj.isCodeRelated && fptObj.codeExample?.code && (
                       <div className="space-y-3 pt-2 animate-fadeIn">
-                        {/* Header / Title */}
                         <h4 className="text-sm font-black uppercase tracking-wider border-b-2 border-black pb-1 inline-block">
                           code example ({fptObj.codeExample?.language || "CODE"})
                         </h4>
 
-                        {/* Code Block Window */}
                         <SyntaxHighlighter language={currentNode.code.language || ""} style={a11yDark}>
-                      {fptObj.codeExample.code}
-                    </SyntaxHighlighter>
-
-                        {/* Explanation Section */}
+                          {fptObj.codeExample.code}
+                        </SyntaxHighlighter>
                         {fptObj.codeExample?.explanation && (
                           <div className="text-xs font-mono text-neutral-700 border-l-4 border-black pl-3 py-1 bg-neutral-50 pr-2">
                             <span className="font-black uppercase text-[10px] block text-neutral-500 tracking-wide mb-0.5">
@@ -625,7 +603,6 @@ export default function LearningEngineUI({ Nodeworkflow, sid, groundid }: params
                       </div>
                     )}
 
-                    {/* Quick Revision Anchor */}
                     <div className="p-3 bg-neutral-200 border border-black font-mono text-xs text-neutral-700">
                       <span className="font-black text-[10px] block uppercase tracking-wider mb-0.5 text-neutral-500">
                         SUMMARY:
@@ -641,7 +618,7 @@ export default function LearningEngineUI({ Nodeworkflow, sid, groundid }: params
                 )
               )}
 
-              {/* Step 2: User Input Transmission */}
+              {/* User Input Transmission */}
               {modalStep === 2 && (
                 <div className="space-y-4 animate-in fade-in duration-200">
                   <div>
@@ -658,7 +635,7 @@ export default function LearningEngineUI({ Nodeworkflow, sid, groundid }: params
                 </div>
               )}
 
-              {/* Step 3: Dedicated Evaluation Feedback Window */}
+              {/* Dedicated Evaluation Feedback Window */}
               {modalStep === 3 && (
                 <div className="space-y-4 animate-in zoom-in-95 duration-200">
                   {isloading ? (
@@ -684,7 +661,6 @@ export default function LearningEngineUI({ Nodeworkflow, sid, groundid }: params
               )}
             </div>
 
-            {/* Locked Action Footer Area */}
             <div className="p-6 pt-3 border-t-4 border-black bg-[#F0F0F0] shrink-0">
               {/* Step 1 Button */}
               {modalStep === 1 && (

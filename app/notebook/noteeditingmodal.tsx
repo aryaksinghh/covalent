@@ -117,10 +117,9 @@ export default function NoteModal({ onClose, note }: noteprops) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-[2px]">
-      {/* Main Modal Card with Neobrutalist Hard Shadow */}
       <div className="w-full max-w-3xl bg-white h-[50vh] border-4 border-black shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] flex flex-col animate-in fade-in zoom-in-95 duration-150">
 
-        {/* Top Bar: Date Badge & Close Button */}
+        {/* Top Bar*/}
         <div className="flex items-center justify-between p-5 pb-2">
           <div className="bg-black text-white px-3 py-1 font-mono text-xs font-bold tracking-wide uppercase">
             {date.day}, {date.date} {date.month} {date.year}
@@ -134,7 +133,6 @@ export default function NoteModal({ onClose, note }: noteprops) {
           </button>
         </div>
 
-        {/* Modal Header / Title */}
         <div className="px-6 pt-2 pb-4 border-b-2 border-black">
           <input
             type="text"
@@ -155,7 +153,6 @@ export default function NoteModal({ onClose, note }: noteprops) {
           />
         </div>
 
-        {/* Footer Area */}
         <div className="flex items-center justify-end px-6 py-4 border-t-2 border-black bg-white">
           <button
             disabled={(note?.description == value && note?.title == title)}

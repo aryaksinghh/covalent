@@ -1,6 +1,8 @@
 "use client"
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { a11yDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
 interface optionobj {
   option: string,
@@ -11,7 +13,8 @@ interface Question {
   id: number;
   questionText: string;
   options: optionobj[];
-  answer: string
+  answer: string;
+  code: { language: string | null, codeString: string | null }
 }
 
 interface answer {
@@ -40,21 +43,18 @@ export default function Braintestingui({ groundid, ques }: propstype) {
   const handleNext = () => {
     if (!selectedOption) return;
 
-    // Save current user selection state
     setAnswers(prev => [...prev, { id: currentQuestion.id, option: selectedOption }]);
-
-    // Trigger sliding animation window
     setIsSliding(true);
 
     setTimeout(() => {
       if (currentIdx < ques.length - 1) {
         setCurrentIdx(prev => prev + 1);
         setSelectedOption(null);
-        setIsSliding(false); // Reset alignment for the next card
+        setIsSliding(false); 
       } else {
         setQuizComplete(true);
       }
-    }, 250); // Match Tailwind's duration-250 transitions
+    }, 250); 
   };
 
   interface result {
@@ -136,31 +136,33 @@ export default function Braintestingui({ groundid, ques }: propstype) {
     <div className="min-h-screen bg-[#f3f3f3] flex flex-col items-center space-y-9 justify-center p-4 font-mono select-none">
       <h1 className='text-2xl text-center underline md:text-5xl font-poppins font-bold'>Small test to test your current knowledge</h1>
 
-      {/* Centered bounding box wrapping the interactive cards */}
+      {/*interactive cards */}
       <div className="w-full max-w-2xl relative overflow-hidden">
 
-        {/* Sliding Animation Handler Wrapper */}
         <div className={`transition-all duration-250 ease-in-out transform ${isSliding ? '-translate-x-full opacity-0' : 'translate-x-0 opacity-100'
           }`}>
 
           {/* Main Question Card Structure */}
           <div className="w-full bg-white border-2 border-black shadow-[8px_8px_0px_0px_#000] p-6 sm:p-8">
 
-            {/* Meta Header */}
             <div className="flex justify-between items-center mb-6 border-b-2 border-black pb-3">
               <span className="text-xs font-black text-black bg-zinc-200 border border-black px-2 py-0.5 tracking-wider uppercase">
                 QUESTION 0{currentIdx + 1} / 05
               </span>
             </div>
 
-            {/* Question Text */}
             <div className="mb-8">
               <h2 className="text-lg sm:text-xl font-black text-black leading-snug">
                 {currentQuestion.questionText}
               </h2>
+              {currentQuestion.code.codeString &&
+                (<div>
+                  <h1 className='text-md font-bold mt-3 mb-3'>Code :</h1>
+                  <SyntaxHighlighter language={currentQuestion.code.language || ""} style={a11yDark}>
+                    {currentQuestion.code.codeString}
+                  </SyntaxHighlighter></div>)}
             </div>
 
-            {/* 4 Options layout block */}
             <div className="space-y-3.5 mb-8">
               {currentQuestion.options.map((options, index) => {
                 const optionLetter = ['A', 'B', 'C', 'D'][index];
@@ -175,13 +177,11 @@ export default function Braintestingui({ groundid, ques }: propstype) {
                       : 'bg-white text-black shadow-[3px_3px_0px_0px_#000] hover:bg-zinc-50 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none'
                       }`}
                   >
-                    {/* Index Bubble */}
                     <span className={`text-xs font-black border border-black px-1.5 py-0.5 uppercase flex-shrink-0 select-none ${isSelected ? 'bg-white text-black' : 'bg-black text-white group-hover:bg-zinc-900'
                       }`}>
                       {optionLetter}
                     </span>
 
-                    {/* Inner Content Label */}
                     <span className="text-sm font-bold leading-tight">
                       {options.text}
                     </span>
@@ -190,7 +190,6 @@ export default function Braintestingui({ groundid, ques }: propstype) {
               })}
             </div>
 
-            {/* Action Bar (With the green vibe correctness button) */}
             <div className="flex justify-end pt-2 border-t-2 border-black">
               <button
                 onClick={handleNext}
@@ -207,7 +206,6 @@ export default function Braintestingui({ groundid, ques }: propstype) {
           </div>
         </div>
 
-        {/* Modular Progress Matrix Bar at base */}
         <div className="mt-4 flex items-center justify-between px-1">
           <div className="flex gap-1">
             {ques.map((_, idx) => (

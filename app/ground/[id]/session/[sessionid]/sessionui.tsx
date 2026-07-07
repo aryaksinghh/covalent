@@ -38,7 +38,6 @@ export default function Sessionui({
 
             <div className="w-full max-w-5xl mt-10 mx-auto font-mono bg-white border-2 border-black p-6 md:p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] text-black">
 
-                {/* Session Results Header */}
                 <h2 className="text-xl md:text-2xl font-bold uppercase mb-2 tracking-wide">
                     Session Results
                 </h2>
@@ -46,8 +45,6 @@ export default function Sessionui({
 
                 {/* Top Metrics Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-
-                    {/* XP Gained */}
                     <div className="border-2 border-black bg-white p-6 flex flex-col items-center justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                         <span className="text-xs md:text-sm font-bold uppercase mb-2 tracking-wider">
                             XP Gained
@@ -57,7 +54,6 @@ export default function Sessionui({
                         </span>
                     </div>
 
-                    {/* Time Spent */}
                     <div className="border-2 border-black bg-white p-6 flex flex-col items-center justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                         <span className="text-xs md:text-sm font-bold uppercase mb-2 tracking-wider">
                             Time Spent Learning
@@ -67,7 +63,6 @@ export default function Sessionui({
                         </span>
                     </div>
 
-                    {/* Score Accuracy */}
                     <div className="border-2 border-black bg-white p-6 flex flex-col items-center justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                         <span className="text-xs md:text-sm font-bold uppercase mb-2 tracking-wider">
                             Score Accuracy (%)
@@ -79,20 +74,17 @@ export default function Sessionui({
 
                 </div>
 
-                {/* Appreciation Banner */}
                 <div className="border-2 border-black bg-white p-4 md:p-6 mb-10 text-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                     <h3 className="text-lg md:text-xl font-bold uppercase tracking-wider">
                         {appreciationText}
                     </h3>
                 </div>
 
-                {/* Topics Revised Header */}
                 <h2 className="text-lg md:text-xl font-bold uppercase mb-2 tracking-wide">
                     Topics Revised
                 </h2>
                 <hr className="border-t-2 border-black mb-6" />
 
-                {/* Topics Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
                     {revisedTopics.map((topic, index) => (
                         <div

@@ -1,4 +1,6 @@
+"use client"
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function HeroSection() {
   return (
@@ -36,7 +38,7 @@ export default function HeroSection() {
           
      
           <div>
-            <button className="
+            <Link href={"/ground"}><button className="
             
                text-sm uppercase tracking-wider font-bold px-6 py-3 bg-white text-black border-2 border-black rounded-none cursor-pointer
               
@@ -51,7 +53,7 @@ export default function HeroSection() {
               active:bg-gray-50
             ">
               Start Revising Now &rarr;
-            </button>
+            </button></Link>
           </div>
         </div>
 

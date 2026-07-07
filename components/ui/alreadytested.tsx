@@ -14,9 +14,7 @@ export default function Alreadytested() {
    
       <div className="max-w-md w-full bg-white border-4 border-black p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
         
-    
-
-      
+  
         <h1 className="text-3xl font-black uppercase text-center leading-none mb-4 tracking-tight">
           Already Tested
         </h1>

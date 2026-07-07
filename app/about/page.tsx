@@ -4,8 +4,6 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-[#eeeeee] text-black p-6 md:p-12 font-mono selection:bg-black selection:text-white">
       <div className="max-w-4xl mx-auto space-y-12 border-l border-r border-black/10 px-4 md:px-8">
-        
-        {/* Main Header Block */}
         <div className="border-2 border-black bg-white p-8 shadow-[6px_6px_0px_0px_#000000]">
           <h1 className="text-3xl font-bold tracking-tight uppercase border-b-2 border-black pb-4 mb-4">
             About Covalent
@@ -17,8 +15,6 @@ export default function AboutPage() {
             completely systematically eliminating imposter syndrome.
           </p>
         </div>
-
-        {/* Core Pillars Section */}
         <div className="space-y-6">
           <h2 className="text-xl font-bold text-center underline decoration-2 underline-offset-8 uppercase tracking-wider mb-8">
             Core Mechanics
@@ -42,9 +38,9 @@ export default function AboutPage() {
                 2
               </div>
               <div>
-                <h3 className="font-bold text-base mb-2">Native Compilation</h3>
+                <h3 className="font-bold text-base mb-2">Scientific Learning Methods</h3>
                 <p className="text-xs text-zinc-700 leading-relaxed">
-                  Write code within live mobile and web environments. No synthetic mock tests—just real execution structures meant to cultivate genuine, functional memory retention from anywhere.
+                  This web app is not regular one. This is engineering based on feynman scientific learning tricks like teaching, spaced repetition, analogy, first principle thinking etc.
                 </p>
               </div>
             </div>

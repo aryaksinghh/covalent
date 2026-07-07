@@ -43,7 +43,6 @@ const Navbar = () => {
     return (
         <nav className='w-screen h-17 border-b-1 font-source relative flex justify-between items-center px-7' ref={dropdownRef}>
              <Toaster position="top-right" toastOptions={{
-                // Define default options
                 className: '',
                 duration: 5000,
                 removeDelay: 1000,
@@ -97,14 +96,6 @@ const Navbar = () => {
                                         className="block px-4 py-2 text-sm font-semibold text-black hover:bg-black hover:text-white transition-colors border-b border-black last:border-0"
                                     >
                                         Dashboard
-                                    </Link>
-                                    <Link
-                                        href="/upgrade"
-                                        onClick={() => setIsDropdownOpen(false)}
-                                        className="block px-4 py-2 text-sm font-bold text-black bg-amber-50 hover:bg-amber-400 transition-colors border-b border-black last:border-0 flex items-center justify-between"
-                                    >
-                                        <span>Upgrade Plan</span>
-                                        <span className="text-[10px] bg-black text-white px-1 py-0.5 uppercase tracking-wider">PRO</span>
                                     </Link>
                                     <button
                                         onClick={handlelogout}
@@ -195,14 +186,6 @@ const Navbar = () => {
                                         className="block px-4 py-2 text-sm font-semibold text-black hover:bg-black hover:text-white transition-colors border-b border-black last:border-0"
                                     >
                                         Dashboard
-                                    </Link>
-                                    <Link
-                                        href="/upgrade"
-                                        onClick={() => setIsDropdownOpen(false)}
-                                        className="block px-4 py-2 text-sm font-bold text-black bg-amber-50 hover:bg-amber-400 transition-colors border-b border-black last:border-0 flex items-center justify-between"
-                                    >
-                                        <span>Upgrade Plan</span>
-                                        <span className="text-[10px] bg-black text-white px-1 py-0.5 uppercase tracking-wider">PRO</span>
                                     </Link>
                                     <button
                                         onClick={handlelogout}

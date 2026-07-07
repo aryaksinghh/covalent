@@ -60,7 +60,6 @@ export default function Login() {
         <div className="md:col-span-6 flex flex-col justify-center p-8 md:p-12 bg-transparent">
           <div className="w-full max-w-sm mx-auto space-y-8">
 
-            {/* Header copy establishing your product line */}
             <div className="space-y-5 text-center md:text-center">
               <h1 className="font-source text-3xl font-bold tracking-tight">Login/Register</h1>
               <p className="font-source text-xs text-gray-600 leading-normal">
