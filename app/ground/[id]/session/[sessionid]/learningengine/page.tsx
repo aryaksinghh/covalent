@@ -264,7 +264,7 @@ export default async function Learningengine({ searchParams, params }: searchPro
               
               Additional Requirements:
               
-              - give questions different or from different approach from what topics revised. dont repeat. i attached topics learned above
+              - give questions different or from different approach or same when topic was complex from what topics revised. dont repeat unnecessary. i attached topics discovered already above
               - Select the most important concepts for this topic and skill level.
               - include code output concepts and ques which used in real life if suitable and according to schema give the code
               - Prioritize concepts developers actually use in projects.
