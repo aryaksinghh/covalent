@@ -28,7 +28,7 @@ type StudyNode = ConceptNode | MCQNode;
 
 interface searchProps {
     searchParams: Promise<{ type?: string, quesno?: string }>,
-    params: { id: string, sessionid: string }
+    params: Promise<{ id: string, sessionid: string }>
 }
 
 export default async function Learningengine({ searchParams, params }: searchProps) {
