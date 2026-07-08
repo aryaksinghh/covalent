@@ -2,9 +2,12 @@
   "name": "covalent",
   "version": "0.1.0",
   "private": true,
+  "workspaces": [
+    "prisma_setup"
+  ],
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate --schema=./prisma_setup/prisma/schema.prisma && next build",
     "start": "next start",
     "lint": "eslint"
   },
