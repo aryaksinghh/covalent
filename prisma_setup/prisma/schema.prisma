@@ -13,11 +13,11 @@ datasource db {
 model User {
   id    String     @id 
   email String  @unique 
-  name  String?
-  role String?
-  country String?
-  experience String?
-  avatar String?
+  name  String @default(" ")
+  role String @default(" ")
+  country String @default(" ")
+  experience String @default(" ")
+  avatar String @default(" ")
   xp Int @default(0)
   ground grounds[]
   notes notebook[]

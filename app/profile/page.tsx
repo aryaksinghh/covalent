@@ -9,5 +9,10 @@ export default async function Profilepage(){
         where:{id:user?.id}
     })
 
+    if (!userdata) {
+        return <div>User not found</div>;
+    }
+    
+
     return <Profile profileDetails={userdata}/>
 }

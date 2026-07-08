@@ -18,7 +18,7 @@ interface User {
     xp: number;
 }
 interface propsUser {
-    profileDetails: User
+    profileDetails: User 
 }
 
 export default function Profile({ profileDetails }: propsUser) {

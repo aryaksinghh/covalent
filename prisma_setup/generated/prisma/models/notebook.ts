@@ -359,6 +359,10 @@ export type notebookUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.notebookScalarWhereInput | Prisma.notebookScalarWhereInput[]
 }
 
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
+}
+
 export type notebookCreateWithoutUserInput = {
   id?: string
   title?: string | null

@@ -200,11 +200,11 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 export type UserGroupByOutputType = {
   id: string
   email: string
-  name: string | null
-  role: string | null
-  country: string | null
-  experience: string | null
-  avatar: string | null
+  name: string
+  role: string
+  country: string
+  experience: string
+  avatar: string
   xp: number
   _count: UserCountAggregateOutputType | null
   _avg: UserAvgAggregateOutputType | null
@@ -234,11 +234,11 @@ export type UserWhereInput = {
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   id?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
-  name?: Prisma.StringNullableFilter<"User"> | string | null
-  role?: Prisma.StringNullableFilter<"User"> | string | null
-  country?: Prisma.StringNullableFilter<"User"> | string | null
-  experience?: Prisma.StringNullableFilter<"User"> | string | null
-  avatar?: Prisma.StringNullableFilter<"User"> | string | null
+  name?: Prisma.StringFilter<"User"> | string
+  role?: Prisma.StringFilter<"User"> | string
+  country?: Prisma.StringFilter<"User"> | string
+  experience?: Prisma.StringFilter<"User"> | string
+  avatar?: Prisma.StringFilter<"User"> | string
   xp?: Prisma.IntFilter<"User"> | number
   ground?: Prisma.GroundsListRelationFilter
   notes?: Prisma.NotebookListRelationFilter
@@ -247,11 +247,11 @@ export type UserWhereInput = {
 export type UserOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  name?: Prisma.SortOrderInput | Prisma.SortOrder
-  role?: Prisma.SortOrderInput | Prisma.SortOrder
-  country?: Prisma.SortOrderInput | Prisma.SortOrder
-  experience?: Prisma.SortOrderInput | Prisma.SortOrder
-  avatar?: Prisma.SortOrderInput | Prisma.SortOrder
+  name?: Prisma.SortOrder
+  role?: Prisma.SortOrder
+  country?: Prisma.SortOrder
+  experience?: Prisma.SortOrder
+  avatar?: Prisma.SortOrder
   xp?: Prisma.SortOrder
   ground?: Prisma.groundsOrderByRelationAggregateInput
   notes?: Prisma.notebookOrderByRelationAggregateInput
@@ -263,11 +263,11 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
-  name?: Prisma.StringNullableFilter<"User"> | string | null
-  role?: Prisma.StringNullableFilter<"User"> | string | null
-  country?: Prisma.StringNullableFilter<"User"> | string | null
-  experience?: Prisma.StringNullableFilter<"User"> | string | null
-  avatar?: Prisma.StringNullableFilter<"User"> | string | null
+  name?: Prisma.StringFilter<"User"> | string
+  role?: Prisma.StringFilter<"User"> | string
+  country?: Prisma.StringFilter<"User"> | string
+  experience?: Prisma.StringFilter<"User"> | string
+  avatar?: Prisma.StringFilter<"User"> | string
   xp?: Prisma.IntFilter<"User"> | number
   ground?: Prisma.GroundsListRelationFilter
   notes?: Prisma.NotebookListRelationFilter
@@ -276,11 +276,11 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  name?: Prisma.SortOrderInput | Prisma.SortOrder
-  role?: Prisma.SortOrderInput | Prisma.SortOrder
-  country?: Prisma.SortOrderInput | Prisma.SortOrder
-  experience?: Prisma.SortOrderInput | Prisma.SortOrder
-  avatar?: Prisma.SortOrderInput | Prisma.SortOrder
+  name?: Prisma.SortOrder
+  role?: Prisma.SortOrder
+  country?: Prisma.SortOrder
+  experience?: Prisma.SortOrder
+  avatar?: Prisma.SortOrder
   xp?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _avg?: Prisma.UserAvgOrderByAggregateInput
@@ -295,22 +295,22 @@ export type UserScalarWhereWithAggregatesInput = {
   NOT?: Prisma.UserScalarWhereWithAggregatesInput | Prisma.UserScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"User"> | string
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
-  name?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
-  role?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
-  country?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
-  experience?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
-  avatar?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  name?: Prisma.StringWithAggregatesFilter<"User"> | string
+  role?: Prisma.StringWithAggregatesFilter<"User"> | string
+  country?: Prisma.StringWithAggregatesFilter<"User"> | string
+  experience?: Prisma.StringWithAggregatesFilter<"User"> | string
+  avatar?: Prisma.StringWithAggregatesFilter<"User"> | string
   xp?: Prisma.IntWithAggregatesFilter<"User"> | number
 }
 
 export type UserCreateInput = {
   id: string
   email: string
-  name?: string | null
-  role?: string | null
-  country?: string | null
-  experience?: string | null
-  avatar?: string | null
+  name?: string
+  role?: string
+  country?: string
+  experience?: string
+  avatar?: string
   xp?: number
   ground?: Prisma.groundsCreateNestedManyWithoutUserInput
   notes?: Prisma.notebookCreateNestedManyWithoutUserInput
@@ -319,11 +319,11 @@ export type UserCreateInput = {
 export type UserUncheckedCreateInput = {
   id: string
   email: string
-  name?: string | null
-  role?: string | null
-  country?: string | null
-  experience?: string | null
-  avatar?: string | null
+  name?: string
+  role?: string
+  country?: string
+  experience?: string
+  avatar?: string
   xp?: number
   ground?: Prisma.groundsUncheckedCreateNestedManyWithoutUserInput
   notes?: Prisma.notebookUncheckedCreateNestedManyWithoutUserInput
@@ -332,11 +332,11 @@ export type UserUncheckedCreateInput = {
 export type UserUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  experience?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  experience?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.StringFieldUpdateOperationsInput | string
   xp?: Prisma.IntFieldUpdateOperationsInput | number
   ground?: Prisma.groundsUpdateManyWithoutUserNestedInput
   notes?: Prisma.notebookUpdateManyWithoutUserNestedInput
@@ -345,11 +345,11 @@ export type UserUpdateInput = {
 export type UserUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  experience?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  experience?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.StringFieldUpdateOperationsInput | string
   xp?: Prisma.IntFieldUpdateOperationsInput | number
   ground?: Prisma.groundsUncheckedUpdateManyWithoutUserNestedInput
   notes?: Prisma.notebookUncheckedUpdateManyWithoutUserNestedInput
@@ -358,33 +358,33 @@ export type UserUncheckedUpdateInput = {
 export type UserCreateManyInput = {
   id: string
   email: string
-  name?: string | null
-  role?: string | null
-  country?: string | null
-  experience?: string | null
-  avatar?: string | null
+  name?: string
+  role?: string
+  country?: string
+  experience?: string
+  avatar?: string
   xp?: number
 }
 
 export type UserUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  experience?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  experience?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.StringFieldUpdateOperationsInput | string
   xp?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type UserUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  experience?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  experience?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.StringFieldUpdateOperationsInput | string
   xp?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
@@ -438,10 +438,6 @@ export type StringFieldUpdateOperationsInput = {
   set?: string
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
 export type IntFieldUpdateOperationsInput = {
   set?: number
   increment?: number
@@ -481,11 +477,11 @@ export type UserUpdateOneRequiredWithoutNotesNestedInput = {
 export type UserCreateWithoutGroundInput = {
   id: string
   email: string
-  name?: string | null
-  role?: string | null
-  country?: string | null
-  experience?: string | null
-  avatar?: string | null
+  name?: string
+  role?: string
+  country?: string
+  experience?: string
+  avatar?: string
   xp?: number
   notes?: Prisma.notebookCreateNestedManyWithoutUserInput
 }
@@ -493,11 +489,11 @@ export type UserCreateWithoutGroundInput = {
 export type UserUncheckedCreateWithoutGroundInput = {
   id: string
   email: string
-  name?: string | null
-  role?: string | null
-  country?: string | null
-  experience?: string | null
-  avatar?: string | null
+  name?: string
+  role?: string
+  country?: string
+  experience?: string
+  avatar?: string
   xp?: number
   notes?: Prisma.notebookUncheckedCreateNestedManyWithoutUserInput
 }
@@ -521,11 +517,11 @@ export type UserUpdateToOneWithWhereWithoutGroundInput = {
 export type UserUpdateWithoutGroundInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  experience?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  experience?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.StringFieldUpdateOperationsInput | string
   xp?: Prisma.IntFieldUpdateOperationsInput | number
   notes?: Prisma.notebookUpdateManyWithoutUserNestedInput
 }
@@ -533,11 +529,11 @@ export type UserUpdateWithoutGroundInput = {
 export type UserUncheckedUpdateWithoutGroundInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  experience?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  experience?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.StringFieldUpdateOperationsInput | string
   xp?: Prisma.IntFieldUpdateOperationsInput | number
   notes?: Prisma.notebookUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -545,11 +541,11 @@ export type UserUncheckedUpdateWithoutGroundInput = {
 export type UserCreateWithoutNotesInput = {
   id: string
   email: string
-  name?: string | null
-  role?: string | null
-  country?: string | null
-  experience?: string | null
-  avatar?: string | null
+  name?: string
+  role?: string
+  country?: string
+  experience?: string
+  avatar?: string
   xp?: number
   ground?: Prisma.groundsCreateNestedManyWithoutUserInput
 }
@@ -557,11 +553,11 @@ export type UserCreateWithoutNotesInput = {
 export type UserUncheckedCreateWithoutNotesInput = {
   id: string
   email: string
-  name?: string | null
-  role?: string | null
-  country?: string | null
-  experience?: string | null
-  avatar?: string | null
+  name?: string
+  role?: string
+  country?: string
+  experience?: string
+  avatar?: string
   xp?: number
   ground?: Prisma.groundsUncheckedCreateNestedManyWithoutUserInput
 }
@@ -585,11 +581,11 @@ export type UserUpdateToOneWithWhereWithoutNotesInput = {
 export type UserUpdateWithoutNotesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  experience?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  experience?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.StringFieldUpdateOperationsInput | string
   xp?: Prisma.IntFieldUpdateOperationsInput | number
   ground?: Prisma.groundsUpdateManyWithoutUserNestedInput
 }
@@ -597,11 +593,11 @@ export type UserUpdateWithoutNotesInput = {
 export type UserUncheckedUpdateWithoutNotesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  experience?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  country?: Prisma.StringFieldUpdateOperationsInput | string
+  experience?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.StringFieldUpdateOperationsInput | string
   xp?: Prisma.IntFieldUpdateOperationsInput | number
   ground?: Prisma.groundsUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -711,11 +707,11 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     email: string
-    name: string | null
-    role: string | null
-    country: string | null
-    experience: string | null
-    avatar: string | null
+    name: string
+    role: string
+    country: string
+    experience: string
+    avatar: string
     xp: number
   }, ExtArgs["result"]["user"]>
   composites: {}
