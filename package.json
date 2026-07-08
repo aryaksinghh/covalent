@@ -2,6 +2,7 @@
   "name": "covalent",
   "version": "0.1.0",
   "private": true,
+  "workspaces":["prisma_setup"],
   "scripts": {
     "dev": "next dev",
     "build": "npx --workspace=prisma_setup prisma generate --schema=./prisma/schema.prisma && next build",
