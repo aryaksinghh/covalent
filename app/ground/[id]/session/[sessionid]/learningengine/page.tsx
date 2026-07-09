@@ -282,9 +282,7 @@ export default async function Learningengine({ searchParams, params }: searchPro
             max_completion_tokens: 6000
         });
         const res = chatcomp.choices[0]?.message?.content || "";
-        console.log("grow ka re", res)
         const quesobject = JSON.parse(res);
-        console.log("this is parsing things",quesobject);
         await redis.set(`node:${sessionid}`, quesobject)
         const conceptarr: ConceptNode[] = quesobject.filter((s: StudyNode) => s.type == "concept");
         const conceptdbarr: string[] = []

@@ -8,7 +8,8 @@ import { notFound } from "next/navigation";
 
 
 interface paramstype {
-  params: Promise<{ id: string }>
+  params?: Promise<{ id: string }>,
+  gid: string
 }
 
 interface optionobj {
@@ -21,20 +22,27 @@ interface Question {
   questionText: string;
   options: optionobj[];
   answer: string
-  code:{language: string|null, codeString: string|null}
+  code: { language: string | null, codeString: string | null }
 }
 
-export default async function Braintesting({ params }: paramstype) {
+export default async function Braintesting({ params, gid }: paramstype) {
+  let groundId: string;
+
+  if (params) {
+    groundId = (await params).id;
+  } else {
+    groundId = gid;
+  }
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  const { id } = await params;
+  // const { id } = await params;
   const redis = Redis.fromEnv()
   let qb: Question[];
-  if (!id || id === "undefined" || id === "null" || id === "") {
+  if (!groundId || groundId === "undefined" || groundId === "null" || groundId === "") {
     return notFound()
   }
   const groundobj = await prisma.grounds.findUnique({
-    where: { id },
+    where: { id: groundId },
     include: { user: true }
   })
   if (groundobj?.user.id != user?.id) {
@@ -49,7 +57,7 @@ export default async function Braintesting({ params }: paramstype) {
     return <Alreadytested />
   }
 
-  const redisFetch: Question[] | null = await redis.get(`ques:${id}`);
+  const redisFetch: Question[] | null = await redis.get(`ques:${groundId}`);
   if (!redisFetch) {
 
     const chatcomp = await groq.chat.completions.create({
@@ -137,7 +145,7 @@ export default async function Braintesting({ params }: paramstype) {
     });
     const res = chatcomp.choices[0]?.message?.content || "";
     const quesobject = JSON.parse(res);
-    await redis.set(`ques:${id}`, quesobject)
+    await redis.set(`ques:${groundId}`, quesobject)
     qb = quesobject
   } else {
     qb = redisFetch
@@ -145,5 +153,5 @@ export default async function Braintesting({ params }: paramstype) {
 
 
 
-  return <Braintestingui groundid={id} ques={qb} />
+  return <Braintestingui groundid={groundId} ques={qb} />
 }

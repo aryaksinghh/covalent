@@ -16,12 +16,12 @@ export default function Sidebar({ isOpen, onClose, Avatar, logout }: SidebarProp
   return (
     <>
       <div 
-        className={`fixed inset-0 bg-black/20  backdrop-blur-sm z-40 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+        className={`fixed inset-0 bg-black/20 h-[100vh]  backdrop-blur-sm z-40 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
         onClick={onClose}
       />
 
       {/* Sidebar panel */}
-      <div className={`fixed top-0 left-0 h-[calc(100vh)] w-72 bg-[#eeeeee] border-r-2 border-black z-50 transform transition-transform duration-300 ease-in-out font-mono ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <div className={`fixed top-0 left-0 h-[100vh] w-72 bg-[#eeeeee] border-r-2 border-black z-50 transform transition-transform duration-300 ease-in-out font-mono ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         
         <div className="p-4 border-b-2 border-black flex justify-between items-center bg-white">
           <span className="font-bold text-xs uppercase tracking-tighter text-zinc-500 underline decoration-black">Menu</span>

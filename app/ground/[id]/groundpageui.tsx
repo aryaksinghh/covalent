@@ -1,11 +1,11 @@
 "use client"
 import React, { useState } from 'react';
-import { Link } from 'lucide-react';
+import { Link2 } from 'lucide-react';
 import Sidebar from '@/components/ui/sidebar';
 import InfoBar from '@/components/ui/infobar';
 import { useUserState } from '@/states/userState';
 import CreateSessionModal from '@/components/ui/sessionmodal';
-
+import Link from 'next/link';
 interface Session {
   id: string;
   groundid: string;
@@ -144,12 +144,12 @@ export default function Groundpageui({ ground }: GroundInfo) {
                 </div>
 
                 <div className="flex justify-end mt-4">
-                  <button
+                  <Link href={`/ground/${ground.id}/session/${session.id}`}><button
                     title="Enter Session"
                     className="p-1.5 bg-white border-2 cursor-pointer border-black hover:bg-black hover:text-white transition-colors shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]"
                   >
-                    <Link className="w-4 h-4 stroke-[2.5]" />
-                  </button>
+                    <Link2 className="w-4 h-4 stroke-[2.5]" />
+                  </button></Link>
                 </div>
               </div>
             ))}
