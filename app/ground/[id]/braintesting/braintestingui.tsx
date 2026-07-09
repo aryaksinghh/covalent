@@ -182,7 +182,7 @@ export default function Braintestingui({ groundid, ques }: propstype) {
                       {optionLetter}
                     </span>
 
-                    <span className="text-sm font-bold leading-tight">
+                    <span className="flex-1 min-w-0 whitespace-normal break-words text-sm font-bold leading-tight">
                       {options.text}
                     </span>
                   </button>
