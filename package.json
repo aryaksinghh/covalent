@@ -5,7 +5,7 @@
   "workspaces":["prisma_setup"],
   "scripts": {
     "dev": "next dev",
-    "build": "npx --workspace=prisma_setup prisma generate --schema=./prisma/schema.prisma && next build",
+    "build": "cd prisma_setup && npx prisma generate && cd .. && next build",
     "start": "next start",
     "lint": "eslint"
   },
