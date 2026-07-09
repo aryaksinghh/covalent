@@ -279,6 +279,7 @@ export default async function Learningengine({ searchParams, params }: searchPro
                 }
             ],
             model: "openai/gpt-oss-120b",
+            max_completion_tokens: 6000
         });
         const res = chatcomp.choices[0]?.message?.content || "";
         console.log("grow ka re", res)
